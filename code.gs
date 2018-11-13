@@ -26,17 +26,7 @@ function doGet(req) {
            return doDelete(req, sheetUsers);
            break;
        default:
-           return HtmlService.createHtmlOutputFromFile('index2');
-           
-       
-     
-       //default:
-       //    return response().json({
-       //       status: false,
-       //       message: 'silent!'
-       //    });
-       
-       
+           return HtmlService.createHtmlOutputFromFile('index2');           
    }
 }
 
@@ -53,13 +43,6 @@ function doRead(request, sheetObject)
    
    data.records = _readData(sheetObject);
   
-  // test email get
-  //var test_record = {'id': 'eco', 'username': Session.getActiveUser().getEmail(), 'email': Session.getActiveUser().getEmail()};
-  //data.records.push(test_record);
-  //return ContentService
-  //          .createTextOutput(callback+'('+JSON.stringify(data)+')')
-  //          .setMimeType(ContentService.MimeType.JAVASCRIPT);
-            //.setMimeType(ContentService.MimeType.JSON);
    return response(callback).json(data);
 
 }
