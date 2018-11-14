@@ -26,7 +26,7 @@ function doGet(req) {
            return doDelete(req, sheetUsers);
            break;
        default:
-           return HtmlService.createHtmlOutputFromFile('index2');           
+           return HtmlService.createHtmlOutputFromFile('index');           
    }
 }
 
