@@ -307,24 +307,25 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       data: {
         solicitudes: [],
         nueva_solicitud: {
+          id: null,
+          nom_solicitante: null,
+          num_cliente: null,
+          fecha_nac: null,
+          nom_ejecutivo: null,
+          sucursal: null,
+          facultado: null,
+          fecha_solicitud: null,
+          producto_ori: null,
+          solicitud_ori: null,
           exp_rev: null,
           num_tar: null,
-          tar_banregio: null,
-          fecha_solicitud: null,
-          sucursal: null,
-          nom_ejecutivo: null,
-          solicitud_ori: null,
-          num_cliente: null,
-          nom_solicitante: null,
-          fecha_nac: null,
+          tar_banregio: null, 
           ingreso_neto: null,
           capacidad_pago: null,
           score_parametrico: null,
-          variables: null,
+          alerta_rechazo: null,
           bc_score: null,
-          limite_tdc: null,
-          producto_ori: null,
-          facultado: null
+          limite_tdc: null  
         }
       },
       computed: {
@@ -334,14 +335,29 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         }
       },
       created: function () {
+        var self = this;
         google.script.run
           .withSuccessHandler(function(response){
             console.log(response);
+            self.solicitudes = response.records;
           })
           .withFailureHandler(function(err){
             console.log(err);
           })
           .read()
+      },
+      methods: {
+        insert: function() {
+          var self = this;
+          google.script.run
+            .withSuccessHandler(function(response){
+              console.log(response);             
+            })
+            .withFailureHandler(function(err){
+              console.log(err);
+            })
+            .insert(this.nueva_solicitud);
+        }
       }
     });
   }
@@ -587,7 +603,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                             <div class="form-group col-md-4">
                                               <label>Variables de A/R:</label>
-                                                  <select id="variables" name="variables" class="form-control" v-model="nueva_solicitud.variables">
+                                                  <select id="alerta_rechazo" name="alerta_rechazo" class="form-control" v-model="nueva_solicitud.alerta_rechazo">
                                                       <option value="3">--- seleccione--- </option>
                                                       <option value="1">Si</option>
                                                       <option value="0">No</option>
@@ -623,7 +639,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           </div>
 
                                           <div class="col-sm-12">
-                                            <input type="submit" class="btn btn-success" style="float:right;" name="importSubmit" value="Guardar"/>
+                                            <input type="" class="btn btn-success" style="float:right;" name="importSubmit" value="Guardar" v-on:click='insert'/>
                                           </div>
 
                                         </div>
