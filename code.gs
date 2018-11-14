@@ -47,6 +47,14 @@ function doRead(request, sheetObject)
 
 }
 
+function read(){
+  var data = {};
+  var sheet = db.getSheetByName("Users");
+  
+  data.records = _readData(sheet);  
+  return data;
+}
+
 /* Insert
  *
  */
