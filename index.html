@@ -329,7 +329,15 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       },
       computed: {
         show_form () {
-          return this.nueva_solicitud.exp_rev === "1";
+            var  avanza = 0;
+            
+            if(this.nueva_solicitud.exp_rev === "1" && this.nueva_solicitud.num_tar < 7  &&  this.nueva_solicitud.tar_banregio === "0"){
+              avanza = 1;
+            }else{
+              avanza = 0;
+            }
+             console.log(avanza);
+          return avanza === 1;
 
         }
       },
@@ -627,7 +635,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           </div>
 
                                         </div>
-                                          
+                                          <div v-else>
+                                          Now you don't
+                                        </div>
                                   </div>
                               </div>                                                                               
                         </form>
