@@ -301,29 +301,31 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   
   var script_url = "https://script.google.com/a/banregio.com/macros/s/AKfycbwMvhxdEh9IuWL6RkG2pkJjLd2YKOc3Rq01tlNtLOY5PxNlwzJa/exec";
 
+  window.onload = function() {
+    const form_app = new Vue({
+      el: '#form-app',
+      data: {
+        solicitudes: [],
+        nueva_solicitud: {
+          exp_rev: null,
+          num_tar: null,
+          tar_banregio: null
 
-  const form_app = new Vue({
-    el: '#form-app',
-    data: {
-      solicitudes: [],
-      nueva_solicitud: {
-        exp_rev: null,
-        num_tar: null,
-        tar_banregio: null
-
+        }
+      },
+      created: function () {
+        google.script.run
+          .withSuccessHandler(function(response){
+            console.log(response);
+          })
+          .withFailureHandler(function(err){
+            console.log(err);
+          })
+          .read()
       }
-    },
-    created: function () {
-      google.script.run
-        .withSuccessHandler(function(response){
-          console.log(response);
-        })
-        .withFailureHandler(function(err){
-          console.log(err);
-        })
-        .read()
-    }
-  });
+    });
+  }
+  
   
   // Make an AJAX call to Google Script
   function insert_value() {
@@ -488,8 +490,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                          
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
-                                                <label> Experiencia revolvente: </label>
-                                                <select id="exp_rev" name="exp_rev" class="form-control">
+                                                <label> Experiencia revolvente: {{nueva_solicitud.exp_rev}} </label>
+                                                <select id="exp_rev" name="exp_rev" class="form-control" v-model="nueva_solicitud.exp_rev">
                                                     <option value="3">--- seleccione--- </option>
                                                     <option value="1">Si</option>
                                                     <option value="0">No</option>

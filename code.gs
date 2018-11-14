@@ -1,11 +1,13 @@
  
+var db = SpreadsheetApp.openById("1-Ps7I1Tyk9RdD53dlD75jPCxe9qrM3Un69UCpJi1AVs");
+
 /* Route
  * All Request with Method Get will be proces here
  */
 function doGet(req) {
    var action = req.parameter.action;
 
-   var db = SpreadsheetApp.openById("1-Ps7I1Tyk9RdD53dlD75jPCxe9qrM3Un69UCpJi1AVs");
+   
   
    // Don't forget to change your Sheet Name by default is 'Sheet1'
    var sheetUsers = db.getSheetByName("Users");
