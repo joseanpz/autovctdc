@@ -459,10 +459,37 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                            
                               <div class ="row">
                                   <div class = "col-sm-12">
+                                        <div class=""><h5>Criterios minimos de elegibilidad</h5></div>
+                                         
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label> Experiencia revolvente: </label>
+                                                <select id="exp_rev" name="exp_rev" class="form-control">
+                                                    <option value="3">--- seleccione--- </option>
+                                                    <option value="1">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                              </div>
+                                              
+                                              <div class="form-group col-md-4">
+                                                <label>N&uacute;mero de tarjetas bancarias: </label>
+                                                <input class="form-control" type="number" min="1" id="num_tar" name="num_tar" />
+                                              </div>
+                                             <div class="form-group col-md-4">
+                                              <label>Cuenta con tarjeta Banregio: </label>
+                                                <select id="tar_banregio" name="tar_banregio" class="form-control">
+                                                  <option value="3">--- seleccione--- </option>
+                                                  <option value="1">Si</option>
+                                                  <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                 
+                                        </div>
+                                        <hr style="border: 2px solid gray;"/>
                                         <div class="form-row">
                                           <div class="form-group col-md-2">
                                               <label>Fecha solicitud:</label>
-                                              <input type="text" class="form-control" value="" id="fecha_solitud" name="fecha_solitud" readonly  >
+                                              <input type="text" class="form-control" value="" readonly  >
                                             </div>
                                             <div class="form-group col-md-4">
                                             <label>Sucursal:</label>
@@ -498,11 +525,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           <div class="form-row">
                                           <div class="form-group col-md-6">
                                               <label >Ingreso neto:</label>
-                                                  <input type="int" id="ingreso_neto" name="ingreso_neto" class="form-control">
+                                                  <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control">
                                             </div>
                                             <div class="form-group col-md-6">
                                               <label >Capacidad de pago:</label>
-                                                  <input type="int" id="capacidad_pago" name="capacidad_pago" class="form-control">
+                                                  <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control">
                                                 
                                             </div>
                                             
@@ -512,7 +539,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           <div class="form-row">
                                           <div class="form-group col-md-4">
                                               <label>Score parametico:</label>
-                                              <input type="int" id="score_parametrico" name="score_parametrico" class="form-control">
+                                              <input type="number" id="score_parametrico" name="score_parametrico" class="form-control">
                                             </div>
                                             <div class="form-group col-md-4">
                                               <label>Variables de A/R:</label>
@@ -536,7 +563,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           <div class="form-row">
                                             <div class="form-group col-md-3">
                                               <label> BC Score:</label>
-                                              <input type="int" id="bc_score" name="bc_score" class="form-control">
+                                              <input type="number" id="bc_score" name="bc_score" class="form-control">
                                             </div>
                                               <div class="form-group col-md-3">
                                                 <label> Experiencia revolvente: </label>
@@ -552,7 +579,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </div>
                                               <div class="form-group col-md-3">
                                                 <label>Limite TDC:</label>
-                                              <input type="int" id="limite_tdc" name="limite_tdc" class="form-control">
+                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control">
                                               </div>
                                           </div>
                                           
