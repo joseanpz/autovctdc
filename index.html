@@ -541,6 +541,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           </div>
 
                                           <div class="form-row">
+                                          <div class="form-group col-md-4">
+                                              <label> BC Score:</label>
+                                              <input type="number" id="bc_score" name="bc_score" class="form-control" v-model="nueva_solicitud.bc_score">
+                                            </div>
                                             <div class="form-group col-md-4">
                                               <label>Score parametico:</label>
                                               <input type="number" id="score_parametrico" name="score_parametrico" class="form-control" v-model="nueva_solicitud.score_parametrico">
@@ -555,28 +559,19 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                             
                                           </div>
-                                          <hr>
-
-                                          <div class="form-row">
-                                            <div class="form-group col-md-3">
-                                              <label> BC Score:</label>
-                                              <input type="number" id="bc_score" name="bc_score" class="form-control" v-model="nueva_solicitud.bc_score">
-                                            </div>
-                                            
-                                            <div class="form-group col-md-3">
-                                              <label>Limite TDC:</label>
-                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="nueva_solicitud.limite_tdc">
-                                            </div>
-                                          </div>
                                           
                                           <div class="form-row">
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-4">
                                               <label> Producto origen:</label>
                                               <select id="producto_ori" name="producto_ori" class="form-control" v-model="nueva_solicitud.producto_ori">
                                                   <option value="1" selected="">Auto PF</option>
                                               </select>
                                             </div>
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-4">
+                                              <label>Limite TDC:</label>
+                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="nueva_solicitud.limite_tdc">
+                                            </div>
+                                            <div class="form-group col-md-4">
                                               <label>Facultado que autoriza:</label>
                                               <input type="text" id="facultado" name="facultado" class="form-control" v-model="nueva_solicitud.facultado">
                                             </div>                                             
@@ -588,7 +583,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                                         </div>
                                           <div v-else>
-                                          Now you don't
+                                              <div class="alert alert-warning">
+                                              <strong>Warning!</strong> El cliente no cumple con las 3 filtros principales
+                                            </div>
                                         </div>
                                   </div>
                               </div>                                                                               
