@@ -102,6 +102,49 @@ function doInsert(req, sheet) {
    });
 }
 
+
+function insert(data) {
+  console.log('doInsert');
+   var id = req.parameter.id;
+   var username = req.parameter.username;
+   var email = req.parameter.email;
+   // all data your needed
+  
+  var callback = req.parameter.callback;
+
+   var flag = 1;
+   var Row = sheet.getLastRow();
+   for (var i = 1; i <= Row; i++) {
+      /* getRange(i, 2) 
+       * i | is a row index
+       * 1 | is a id column index ('id')
+       */
+      var idTemp = sheet.getRange(i, 1).getValue();
+      if (idTemp == id) {
+         flag = 0;
+         var result = "Sorry bratha, id already exist";
+      }
+   }
+   
+   // add new row with recieved parameter from client
+   if (flag == 1) {
+      var timestamp = Date.now();
+      var currentTime = new Date().toLocaleString(); // Full Datetime
+      var rowData = sheet.appendRow([
+         id,
+         username,
+         email,
+         timestamp,
+         currentTime
+      ]);
+      var result = "Insertion successful";
+   }
+
+   return response(callback).json({
+      result: result
+   });
+}
+
 /* Update
  * request for Update
  *

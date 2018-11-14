@@ -310,8 +310,21 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           exp_rev: null,
           num_tar: null,
           tar_banregio: null,
-          sucursal: null
-
+          fecha_solicitud: null,
+          sucursal: null,
+          nom_ejecutivo: null,
+          solicitud_ori: null,
+          num_cliente: null,
+          nom_solicitante: null,
+          fecha_nac: null,
+          ingreso_neto: null,
+          capacidad_pago: null,
+          score_parametrico: null,
+          variables: null,
+          bc_score: null,
+          limite_tdc: null,
+          producto_ori: null,
+          facultado: null
         }
       },
       computed: {
@@ -524,7 +537,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           <div class="form-row">
                                             <div class="form-group col-md-2">
                                                 <label>Fecha solicitud:</label>
-                                                <input type="text" class="form-control" value="" readonly  >
+                                                <input type="text" class="form-control" value="" readonly v-model="nueva_solicitud.fecha_solicitud" >
                                             </div>
                                             <div class="form-group col-md-4">
                                               <label>Sucursal:</label>
@@ -532,26 +545,26 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                             <div class="form-group col-md-4">
                                               <label>Ejecutivo:</label>
-                                              <input class="form-control" type="text"  id="nom_ejecutivo" name="nom_ejecutivo" />
+                                              <input class="form-control" type="text"  id="nom_ejecutivo" name="nom_ejecutivo" v-model="nueva_solicitud.nom_ejecutivo"/>
                                             </div>
                                             <div class="form-group col-md-2">
                                               <label>Solicitud:</label>
-                                              <input class="form-control" type="text"  id="solicitud_ori" name="solicitud_ori" />
+                                              <input class="form-control" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="nueva_solicitud.solicitud_ori"/>
                                             </div>                                            
                                           </div>
 
                                           <div class="form-row">
                                             <div class="form-group col-md-3">
                                               <label>N&uacute;mero cliente: </label>
-                                              <input class="form-control" type="text"  id="num_cliente" name="num_cliente" />
+                                              <input class="form-control" type="text"  id="num_cliente" name="num_cliente" v-model="nueva_solicitud.num_cliente"/>
                                             </div>
                                             <div class="form-group col-md-6">
                                             <label>Solicitante: </label>
-                                              <input class="form-control" type="text"  id="nom_solicitante" name="nom_solicitante" />
+                                              <input class="form-control" type="text"  id="nom_solicitante" name="nom_solicitante" v-model="nueva_solicitud.nom_solicitante"/>
                                             </div>
                                             <div class="form-group col-md-3">
                                             <label>Fecha nacimiento: </label>
-                                              <input class="form-control" type="date"  id="fecha_nac" name="fecha_nac" />
+                                              <input class="form-control" type="date"  id="fecha_nac" name="fecha_nac" v-model="nueva_solicitud.fecha_nac"/>
                                             </div>                                            
                                           </div>
                                           <hr/>
@@ -559,71 +572,53 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           <div class="form-row">
                                             <div class="form-group col-md-6">
                                               <label >Ingreso neto:</label>
-                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control">
+                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="nueva_solicitud.ingreso_neto">
                                             </div>
                                             <div class="form-group col-md-6">
                                               <label >Capacidad de pago:</label>
-                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control">               
+                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="nueva_solicitud.capacidad_pago">               
                                             </div>                                            
                                           </div>
 
                                           <div class="form-row">
                                             <div class="form-group col-md-4">
                                               <label>Score parametico:</label>
-                                              <input type="number" id="score_parametrico" name="score_parametrico" class="form-control">
+                                              <input type="number" id="score_parametrico" name="score_parametrico" class="form-control" v-model="nueva_solicitud.score_parametrico">
                                             </div>
                                             <div class="form-group col-md-4">
                                               <label>Variables de A/R:</label>
-                                                  <select id="variables" name="variables" class="form-control">
+                                                  <select id="variables" name="variables" class="form-control" v-model="nueva_solicitud.variables">
                                                       <option value="3">--- seleccione--- </option>
                                                       <option value="1">Si</option>
                                                       <option value="0">No</option>
                                                   </select>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                              <label>Cuenta con tarjeta Banregio: </label>
-                                                <select id="tar_banregio" name="tar_banregio" class="form-control">
-                                                  <option value="3">--- seleccione--- </option>
-                                                  <option value="1">Si</option>
-                                                  <option value="0">No</option>
-                                                </select>
-                                            </div>
+                                            
                                           </div>
                                           <hr>
 
                                           <div class="form-row">
                                             <div class="form-group col-md-3">
                                               <label> BC Score:</label>
-                                              <input type="number" id="bc_score" name="bc_score" class="form-control">
+                                              <input type="number" id="bc_score" name="bc_score" class="form-control" v-model="nueva_solicitud.bc_score">
                                             </div>
-                                            <div class="form-group col-md-3">
-                                              <label> Experiencia revolvente: </label>
-                                              <select id="exp_rev" name="exp_rev" class="form-control">
-                                                  <option value="3">--- seleccione--- </option>
-                                                  <option value="1">Si</option>
-                                                  <option value="0">No</option>
-                                              </select>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                              <label>N&uacute;mero de tarjetas bancarias: </label>
-                                              <input class="form-control" type="int" min="1" id="num_tar" name="num_tar" />
-                                            </div>
+                                            
                                             <div class="form-group col-md-3">
                                               <label>Limite TDC:</label>
-                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control">
+                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="nueva_solicitud.limite_tdc">
                                             </div>
                                           </div>
                                           
                                           <div class="form-row">
                                             <div class="form-group col-md-6">
                                               <label> Producto origen:</label>
-                                              <select id="producto_ori" name="producto_ori" class="form-control">
+                                              <select id="producto_ori" name="producto_ori" class="form-control" v-model="nueva_solicitud.producto_ori">
                                                   <option value="1" selected="">Auto PF</option>
                                               </select>
                                             </div>
                                             <div class="form-group col-md-6">
                                               <label>Facultado que autoriza:</label>
-                                              <input type="text" id="facultado" name="facultado" class="form-control">
+                                              <input type="text" id="facultado" name="facultado" class="form-control" v-model="nueva_solicitud.facultado">
                                             </div>                                             
                                           </div>
 
