@@ -51,7 +51,9 @@ function doRead(request, sheetObject)
 
 function read(){
   var data = {};
-  var sheet = db.getSheetByName("Users");
+  var sheet = db.getSheetByName("solicitudes");
+  
+  
   
   data.records = _readData(sheet);  
   return data;
@@ -252,9 +254,11 @@ function _readData(sheetObject, properties) {
          return p.replace(/\s+/g, '_');
       });
    }
+  // return properties;
 
    var rows = _getDataRows(sheetObject),
       data = [];
+  //return rows;
 
    for (var r = 0, l = rows.length; r < l; r++) {
       var row = rows[r],
@@ -271,8 +275,14 @@ function _readData(sheetObject, properties) {
 }
 function _getDataRows(sheetObject) {
    var sh = sheetObject;
+  //return [2, 1, sh.getLastRow() - 1, sh.getLastColumn()];
 
-   return sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues();
+  //var header
+
+  var rows = sh.getRange(2, 1, sh.getLastRow()-1, sh.getLastColumn()).getDisplayValues();
+  //rows.map(row => row.map())
+
+  return rows;
 }
 function _getHeaderRow(sheetObject) {
    var sh = sheetObject;

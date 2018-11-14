@@ -303,7 +303,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
   window.onload = function() {
     const form_app = new Vue({
-      el: '#form-app',
+      el: '#solicitud-app',
       data: {
         solicitudes: [],
         nueva_solicitud: {
@@ -335,23 +335,27 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         }
       },
       created: function () {
-        var self = this;
-        google.script.run
-          .withSuccessHandler(function(response){
-            console.log(response);
-            self.solicitudes = response.records;
-          })
-          .withFailureHandler(function(err){
-            console.log(err);
-          })
-          .read()
+        this.read()
       },
       methods: {
+        read: function () {
+          var self = this;
+          google.script.run
+            .withSuccessHandler(function(response){
+              console.log(response);
+              self.solicitudes = response.records;
+            })
+            .withFailureHandler(function(err){
+              console.log(err);
+            })
+            .read()
+        },
         insert: function() {
           var self = this;
           google.script.run
             .withSuccessHandler(function(response){
-              console.log(response);             
+              console.log(response);
+              self.read();           
             })
             .withFailureHandler(function(err){
               console.log(err);
@@ -364,76 +368,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   
   
   // Make an AJAX call to Google Script
-  function insert_value() {
-    
-    $("#re").css("visibility","hidden");
-     document.getElementById("loader").style.visibility = "visible";
-    $('#mySpinner').addClass('spinner');
-
-    var id1=  $("#id").val();
-    var username= $("#username").val();
-    var email= $("#email").val();
-  
-  
-    var url = script_url+"?username="+username+"&id="+id1+"&email="+email+"&action=insert&callback=ctrlq";
   
 
-    var request = jQuery.ajax({
-      crossDomain: true,
-      url: url ,
-      method: "GET",
-      dataType: "jsonp"
-    });
-  }
-  
-  function update_value(){
-    $("#re").css("visibility","hidden");
-    document.getElementById("loader").style.visibility = "visible";
-  
-  
-    var id1=  $("#id").val();
-    var username= $("#username").val();
-    var email= $("#email").val();
-  
-  
-    var url = script_url+"?callback=ctrlq&username="+username+"&id="+id1+"&email="+email+"&action=update";
-  
-
-    var request = jQuery.ajax({
-      crossDomain: true,
-      url: url ,
-      method: "GET",
-      dataType: "jsonp"
-    }); 
-  } 
-  
-  
-  function delete_value(){
-    $("#re").css("visibility","hidden");
-    document.getElementById("loader").style.visibility = "visible";
-    $('#mySpinner').addClass('spinner');
-    var id1=  $("#id").val();
-    var name= $("#name").val();
-  
-  
-    var url = script_url+"?callback=ctrlq&name="+name+"&id="+id1+"&action=delete";
-  
-
-    var request = jQuery.ajax({
-      crossDomain: true,
-      url: url ,
-      method: "GET",
-      dataType: "jsonp"
-    });
-
-  }  
-  
-  // print the returned data
-  function ctrlq(e) { 
-    $("#re").html(e.result);
-    $("#re").css("visibility","visible");
-    read_value(); 
-  }  
 
   
   function read_value() {
@@ -511,7 +447,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             <div class="card-header">
               <i class="fas fa-table"></i>
               Solicitudes Auto</div>
-            <div class="card-body">
+            <div class="card-body" id="solicitud-app">
               <div class="table-responsive">
                 <a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">+ Solicitud</a> <br/>
                 <hr style="border: 2px solid gray;">
@@ -654,18 +590,19 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                   <thead>
                     <tr>
                       <th>Id</th>
-                      <th>Username</th>
-                      <th>Email</th>
-					  <th></th>
+                      <th>Producto origen</th>
+                      <th>Solicitante</th>
+                      <th>Ejecutivo</th>
                      </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Id</td>
-                      <td>Username</td>
-                      <td>Email</td>
-					  <td></td>
-                     </tr>
+
+                    <tr v-for="solicitud in solicitudes" >
+                      <td>{{solicitud.id}}</td>
+                      <td>{{solicitud.producto_ori}}</td>
+                      <td>{{solicitud.nom_solicitante}}</td>
+                      <td>{{solicitud.nom_ejecutivo}}</td>
+                    </tr>
                   
                   </tbody>
                 </table>
@@ -692,37 +629,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
     </div>
     <!-- /#wrapper -->
 
-<div align="center">
-<h1>CRUD OPERATION ON GOOGLE SPREAD SHEET, WEB APPLICATION USING GOOGLE APP SCRIPT .</h1> 
-<p>This is simple application, You can develop your own logic based on your requiremnets.<p>
-<p>Be careful with the parameters you are sending, it should match the parameters that are recived in google app script.</p>
 
-
-<form >
-ID
-<input type = "text" name ="id" id="id">
-Username
-<input type = "text" name ="usernamer" id="username">
-Email
-<input type = "text" name ="email" id="email">
-
-</form>
-
-<div id="loader"></div>
-
-<p id="re"></p>
-
-<input type = "button"  id = "b1" onClick="insert_value()" value = "Insert"></input>
-<input type="button" onclick="read_value()" value="Read" />
-<input type="button" onclick="update_value()" value="Update" />
-<input type="button" onclick="delete_value()" value="Delete" />
-
-<a href="https://docs.google.com/spreadsheets/d/1OmqvphAqP4WEcrsZAMNNeL2YVn3RJffVOIGgdPiyEVA/edit?usp=sharing" target="_blank">Click here to open Spread Sheet </a>
-
-<div id="showData"></div>
-</div>
 </body>
-<div align="center">
-<p>ANDROID LABS 2017 | All Rights Reserved</p>
-</div>
+
 <html>
