@@ -296,9 +296,34 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script>
   
   var script_url = "https://script.google.com/a/banregio.com/macros/s/AKfycbwMvhxdEh9IuWL6RkG2pkJjLd2YKOc3Rq01tlNtLOY5PxNlwzJa/exec";
+
+
+  const form_app = new Vue({
+    el: '#form-app',
+    data: {
+      solicitudes: [],
+      nueva_solicitud: {
+        exp_rev: null,
+        num_tar: null,
+        tar_banregio: null
+
+      }
+    },
+    created: function () {
+      google.script.run
+        .withSuccessHandler(function(response){
+          console.log(response);
+        })
+        .withFailureHandler(function(err){
+          console.log(err);
+        })
+        .read()
+    }
+  });
   
   // Make an AJAX call to Google Script
   function insert_value() {
@@ -457,7 +482,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                 
                         <form action="" method="post" enctype="multipart/form-data" id="" class="" >
                            
-                              <div class ="row">
+                              <div class ="row" id="form-app">
                                   <div class = "col-sm-12">
                                         <div class=""><h5>Criterios minimos de elegibilidad</h5></div>
                                          
