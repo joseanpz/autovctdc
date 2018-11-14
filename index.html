@@ -313,6 +313,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         }
       },
+      computed: {
+        show_form () {
+          return this.nueva_solicitud.exp_rev === "1";
+
+        }
+      },
       created: function () {
         google.script.run
           .withSuccessHandler(function(response){
@@ -500,41 +506,41 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               
                                               <div class="form-group col-md-4">
                                                 <label>N&uacute;mero de tarjetas bancarias: </label>
-                                                <input class="form-control" type="number" min="1" id="num_tar" name="num_tar" />
+                                                <input class="form-control" type="number" min="1" id="num_tar" name="num_tar" v-model="nueva_solicitud.num_tar"/>
                                               </div>
                                              <div class="form-group col-md-4">
                                               <label>Cuenta con tarjeta Banregio: </label>
-                                                <select id="tar_banregio" name="tar_banregio" class="form-control">
+                                                <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="nueva_solicitud.tar_banregio">
                                                   <option value="3">--- seleccione--- </option>
                                                   <option value="1">Si</option>
                                                   <option value="0">No</option>
                                                 </select>
-                                            </div>
+                                        </div>
                                  
                                         </div>
                                         <hr style="border: 2px solid gray;"/>
-                                        <div class="form-row">
-                                          <div class="form-group col-md-2">
-                                              <label>Fecha solicitud:</label>
-                                              <input type="text" class="form-control" value="" readonly  >
+                                        <div v-if="show_form">
+                                          <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label>Fecha solicitud:</label>
+                                                <input type="text" class="form-control" value="" readonly  >
                                             </div>
                                             <div class="form-group col-md-4">
-                                            <label>Sucursal:</label>
+                                              <label>Sucursal:</label>
                                               <input class="form-control" type="text"  id="sucursal" name="sucursal" />
                                             </div>
                                             <div class="form-group col-md-4">
-                                            <label>Ejecutivo:</label>
+                                              <label>Ejecutivo:</label>
                                               <input class="form-control" type="text"  id="nom_ejecutivo" name="nom_ejecutivo" />
                                             </div>
                                             <div class="form-group col-md-2">
-                                            <label>Solicitud:</label>
+                                              <label>Solicitud:</label>
                                               <input class="form-control" type="text"  id="solicitud_ori" name="solicitud_ori" />
-                                            </div>
-                                            
+                                            </div>                                            
                                           </div>
-                                          
+
                                           <div class="form-row">
-                                          <div class="form-group col-md-3">
+                                            <div class="form-group col-md-3">
                                               <label>N&uacute;mero cliente: </label>
                                               <input class="form-control" type="text"  id="num_cliente" name="num_cliente" />
                                             </div>
@@ -545,26 +551,23 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             <div class="form-group col-md-3">
                                             <label>Fecha nacimiento: </label>
                                               <input class="form-control" type="date"  id="fecha_nac" name="fecha_nac" />
-                                            </div>
-                                            
+                                            </div>                                            
                                           </div>
-                                            <hr/>
+                                          <hr/>
+
                                           <div class="form-row">
-                                          <div class="form-group col-md-6">
+                                            <div class="form-group col-md-6">
                                               <label >Ingreso neto:</label>
-                                                  <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control">
+                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control">
                                             </div>
                                             <div class="form-group col-md-6">
                                               <label >Capacidad de pago:</label>
-                                                  <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control">
-                                                
-                                            </div>
-                                            
+                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control">               
+                                            </div>                                            
                                           </div>
-                                                                                   
-                                          
+
                                           <div class="form-row">
-                                          <div class="form-group col-md-4">
+                                            <div class="form-group col-md-4">
                                               <label>Score parametico:</label>
                                               <input type="number" id="score_parametrico" name="score_parametrico" class="form-control">
                                             </div>
@@ -586,52 +589,51 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                           </div>
                                           <hr>
-                                          
+
                                           <div class="form-row">
                                             <div class="form-group col-md-3">
                                               <label> BC Score:</label>
                                               <input type="number" id="bc_score" name="bc_score" class="form-control">
                                             </div>
-                                              <div class="form-group col-md-3">
-                                                <label> Experiencia revolvente: </label>
-                                                <select id="exp_rev" name="exp_rev" class="form-control">
-                                                    <option value="3">--- seleccione--- </option>
-                                                    <option value="1">Si</option>
-                                                    <option value="0">No</option>
-                                                </select>
-                                              </div>
-                                              <div class="form-group col-md-3">
-                                                <label>N&uacute;mero de tarjetas bancarias: </label>
-                                                <input class="form-control" type="int" min="1" id="num_tar" name="num_tar" />
-                                              </div>
-                                              <div class="form-group col-md-3">
-                                                <label>Limite TDC:</label>
+                                            <div class="form-group col-md-3">
+                                              <label> Experiencia revolvente: </label>
+                                              <select id="exp_rev" name="exp_rev" class="form-control">
+                                                  <option value="3">--- seleccione--- </option>
+                                                  <option value="1">Si</option>
+                                                  <option value="0">No</option>
+                                              </select>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label>N&uacute;mero de tarjetas bancarias: </label>
+                                              <input class="form-control" type="int" min="1" id="num_tar" name="num_tar" />
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label>Limite TDC:</label>
                                               <input type="number" id="limite_tdc" name="limite_tdc" class="form-control">
-                                              </div>
+                                            </div>
                                           </div>
                                           
-                                           <div class="form-row">
-                                             <div class="form-group col-md-6">
-                                                  <label> Producto origen:</label>
-                                                  <select id="producto_ori" name="producto_ori" class="form-control">
-                                                      <option value="1" selected="">Auto PF</option>
-                                                  </select>
-                                              </div>
-                                              <div class="form-group col-md-6">
-                                                <label>Facultado que autoriza:</label>
-                                              <input type="text" id="facultado" name="facultado" class="form-control">
-                                              </div>
-                                              
+                                          <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                              <label> Producto origen:</label>
+                                              <select id="producto_ori" name="producto_ori" class="form-control">
+                                                  <option value="1" selected="">Auto PF</option>
+                                              </select>
                                             </div>
-      
+                                            <div class="form-group col-md-6">
+                                              <label>Facultado que autoriza:</label>
+                                              <input type="text" id="facultado" name="facultado" class="form-control">
+                                            </div>                                             
+                                          </div>
+
+                                          <div class="col-sm-12">
+                                            <input type="submit" class="btn btn-success" style="float:right;" name="importSubmit" value="Guardar"/>
+                                          </div>
+
+                                        </div>
+                                          
                                   </div>
-                                    <div class="col-sm-12">
-                                    <input type="submit" class="btn btn-success" style="float:right;" name="importSubmit" value="Guardar"/>
-                                    </div>
-                                </div>
-                              
-      
-                            
+                              </div>                                                                               
                         </form>
                 </div>
              
