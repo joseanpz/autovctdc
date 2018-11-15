@@ -298,8 +298,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script>
-  
-  var script_url = "https://script.google.com/a/banregio.com/macros/s/AKfycbwMvhxdEh9IuWL6RkG2pkJjLd2YKOc3Rq01tlNtLOY5PxNlwzJa/exec";
 
   window.onload = function() {
     const form_app = new Vue({
@@ -376,48 +374,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   
   
   // Make an AJAX call to Google Script
-  
-
 
   
-  function read_value() {
-
-    $("#re").css("visibility","hidden");
-   
-    document.getElementById("loader").style.visibility = "visible";
-    var url = script_url+"?action=read&callback=?";
-
-    $.getJSON(url, function callb(json) {
-      // Set the variables from the results array
-    
-      console.log(json);
-      // CREATE DYNAMIC TABLE.
-   
-      var table = document.getElementById("dataTable");   
-
-  
-        
-        // ADD JSON DATA TO THE TABLE AS ROWS.
-      for (var i = 0; i < json.records.length; i++) {
-        console.log(json.records[i]);
-
-        tr = table.insertRow(-1);
-        var tabCell = tr.insertCell(-1);
-        tabCell.innerHTML = json.records[i].id;
-        tabCell = tr.insertCell(-1);
-        tabCell.innerHTML = json.records[i].username;
-        tabCell = tr.insertCell(-1);
-        tabCell.innerHTML = json.records[i].email; 
-
-                    
-      }
-            
-      console.log(tr);
-      
-      document.getElementById("loader").style.visibility = "hidden";
-      
-    });
-  }
   
   </script>
 
