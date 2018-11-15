@@ -49,6 +49,8 @@ function doRead(request, sheetObject)
 
 }
 
+
+
 function read(){
   var data = {};
   var sheet = db.getSheetByName("solicitudes");
@@ -302,4 +304,11 @@ function response(callback) {
             //.setMimeType(ContentService.MimeType.JSON);
       }
    }
+}
+
+function crear_file(){
+      var folder = DriveApp.createFolder("Solicitud_folder");
+      folder.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT);
+      var doc = DocumentApp.create("documento_1");
+      doc.getBody().appendParagraph("Este es un documento creado desde boton");
 }

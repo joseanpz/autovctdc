@@ -367,8 +367,21 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               console.log(err);
             })
             .insert(this.nueva_solicitud);
-        }
+        },
+        crea_doc: function(){
+          var self = this;
+          google.script.run
+            .withSuccessHandler(function(response){
+              console.log(response);
+              //self.read();           
+            })
+            .withFailureHandler(function(err){
+              console.log(err);
+            })
+            .crear_file();
+		}	
       }
+	  
     });
   }
   
@@ -558,6 +571,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                       <th>Producto origen</th>
                       <th>Solicitante</th>
                       <th>Ejecutivo</th>
+                      <th></th>
                      </tr>
                   </thead>
                   <tbody>
@@ -567,6 +581,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                       <td>{{solicitud.producto_ori}}</td>
                       <td>{{solicitud.nom_solicitante}}</td>
                       <td>{{solicitud.nom_ejecutivo}}</td>
+                      <td><button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button></td>
                     </tr>
                   
                   </tbody>
