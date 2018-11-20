@@ -441,27 +441,26 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                          
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
-                                                <label> Experiencia revolvente: {{nueva_solicitud.exp_rev}} </label>
-                                                <select id="exp_rev" name="exp_rev" class="form-control" v-model="nueva_solicitud.exp_rev">
-                                                    <option value="3">--- seleccione--- </option>
-                                                    <option value="1">Si</option>
-                                                    <option value="0">No</option>
-                                                </select>
-                                              </div>
+                                              <label> Experiencia revolvente: {{nueva_solicitud.exp_rev}} </label>
+                                              <select id="exp_rev" name="exp_rev" class="form-control" v-model="nueva_solicitud.exp_rev">
+                                                  <option value="3">--- seleccione--- </option>
+                                                  <option value="1">Si</option>
+                                                  <option value="0">No</option>
+                                              </select>
+                                            </div>
                                               
                                               <div class="form-group col-md-4">
                                                 <label>N&uacute;mero de tarjetas bancarias: </label>
                                                 <input class="form-control" type="number" min="1" id="num_tar" name="num_tar" v-model="nueva_solicitud.num_tar"/>
                                               </div>
-                                             <div class="form-group col-md-4">
+                                            <div class="form-group col-md-4">
                                               <label>Cuenta con tarjeta Banregio: </label>
-                                                <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="nueva_solicitud.tar_banregio">
-                                                  <option value="3">--- seleccione--- </option>
-                                                  <option value="1">Si</option>
-                                                  <option value="0">No</option>
-                                                </select>
-                                        </div>
-                                 
+                                              <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="nueva_solicitud.tar_banregio">
+                                                <option value="3">--- seleccione--- </option>
+                                                <option value="1">Si</option>
+                                                <option value="0">No</option>
+                                              </select>
+                                            </div>                                 
                                         </div>
                                         <hr style="border: 2px solid gray;"/>
                                         <div v-if="show_form">
