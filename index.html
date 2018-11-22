@@ -350,7 +350,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
-              self.solicitudes = response.records;
+              self.solicitudes = response.records.sort((rec1, rec2) => rec2.id - rec1.id);
             })
             .withFailureHandler(function(err){
               console.log(err);
@@ -583,7 +583,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                     <tr v-for="solicitud in solicitudes" >
                       <td>{{solicitud.id}}</td>
-                      <td>{{solicitud.producto_ori}}</td>
+                      <td>{{solicitud.email_geerador}}</td>
                       <td>{{solicitud.nom_solicitante}}</td>
                       <td>{{solicitud.nom_ejecutivo}}</td>
                       <td>

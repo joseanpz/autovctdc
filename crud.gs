@@ -18,6 +18,8 @@ function read(){
 
 function insert(data) {
 
+  
+  var user = new User(Session.getActiveUser());
    // all data your needed
   
   var sheetSolicitudes = db.getSheetByName("solicitudes");
@@ -55,6 +57,7 @@ function insert(data) {
           data.bc_score,
           data.limite_tdc,
           data.email_generador
+          //user.getEnail()
         ]])
         var result = "Update successful";
         break;         
@@ -104,6 +107,7 @@ function insert(data) {
          data.bc_score,
          data.limite_tdc,
          data.email_generador
+         //user.getEnail()
       ]);
 
 

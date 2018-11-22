@@ -1,7 +1,5 @@
-/*
-* Modelo de Solicitud
-*
-*/
+
+
 function Solicitud (data) {
 
   this.id = data.id; 
