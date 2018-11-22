@@ -47,9 +47,9 @@ function edad(data) {
      
      // Calculo de Edad
   if(Fecha_Nac.getDate() > fecha.getDate()){
-    return var_Edad = (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1) - 1;
+    return  (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1) - 1;
   }else{
-    return var_Edad = (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1);
+    return  (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1);
   }
 }
 
