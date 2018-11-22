@@ -21,6 +21,7 @@ function insert(data) {
    // all data your needed
   
   var sheetSolicitudes = db.getSheetByName("solicitudes");
+  
 
    var flag = 1;
    var Row = sheetSolicitudes.getLastRow();
@@ -32,7 +33,31 @@ function insert(data) {
       var idTemp = sheetSolicitudes.getRange(i, 1).getValue();
       if (idTemp == data.id) {
          flag = 0;
-         var result = "Sorry bratha, id already exist";
+        
+        sheetSolicitudes.getRange(i, 1, 1, sheetSolicitudes.getLastColumn()).setValues([[
+          data.id,
+          data.nom_solicitante,
+          data.num_cliente,
+          data.fecha_nac,
+          data.nom_ejecutivo,
+          data.sucursal,
+          data.facultado,
+          data.fecha_solicitud,
+          data.producto_ori,
+          data.solicitud_ori,
+          data.exp_rev,
+          data.num_tar,
+          data.tar_banregio,
+          data.ingreso_neto,
+          data.capacidad_pago,
+          data.score_parametrico,
+          data.alerta_rechazo,
+          data.bc_score,
+          data.limite_tdc,
+          data.email_generador
+        ]])
+        var result = "Update successful";
+        break;         
       }
    }
 
@@ -48,8 +73,18 @@ function insert(data) {
       var currentTime = new Date().toLocaleString(); // Full Datetime
       
 
+      var sheetConfigs = db.getSheetByName("configs");
+
+      var configs = _readData(sheetConfigs);
+     
+     var auto_inc = configs[0];
+
+      var auto_inc_id = parseInt(auto_inc.value);
+      sheetConfigs.getRange(2,2,1,1).setValue(auto_inc_id+1);
+
+
       var rowData = sheetSolicitudes.appendRow([
-         data.id,
+         auto_inc_id,
          data.nom_solicitante,
          data.num_cliente,
          data.fecha_nac,
@@ -70,12 +105,18 @@ function insert(data) {
          data.limite_tdc,
          data.email_generador
       ]);
+
+
       var result = "Insertion successful";
    }
 
    return {
       result: result
    };
+}
+
+function checkAutoInc(row) {
+    return row.name === 'autoinc_count_sol';
 }
 
 

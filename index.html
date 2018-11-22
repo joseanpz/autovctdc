@@ -371,6 +371,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             })
             .insert(this.nueva_solicitud);
         },
+        edit: function(id) {
+          var self = this;
+          console.log('editing');
+          this.nueva_solicitud = this.solicitudes.find(row => row.id == id);
+        },
         crea_doc: function(){
           var self = this;
           google.script.run
@@ -587,7 +592,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                       <td>{{solicitud.producto_ori}}</td>
                       <td>{{solicitud.nom_solicitante}}</td>
                       <td>{{solicitud.nom_ejecutivo}}</td>
-                      <td><button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button></td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='edit(solicitud.id)'>Editar</button>
+                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button>
+                      </td>
                     </tr>
                   
                   </tbody>
