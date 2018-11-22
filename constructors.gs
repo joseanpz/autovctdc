@@ -1,25 +1,7 @@
-var data = {
-      "id":"10",
-      "nom_solicitante":"Jacob Mendoza",
-      "num_cliente":"248907",
-      "fecha_nac":"1989-07-24",
-      "nom_ejecutivo":"Juan Perez",
-      "sucursal":"Nuevo Sur",
-      "facultado":"Pedro Ramirez",
-      "fecha_solicitud":"2018-11-01",
-      "producto_ori":"Auto",
-      "solicitud_ori":"0052485",
-      "exp_rev":"1",
-      "num_tar":"5",
-      "tar_banregio":"0",
-      "ingreso_neto":"524552",
-      "capacidad_pago":"5255",
-      "score_parametrico":"654",
-      "alerta_rechazo":"1",
-      "bc_score":"742",
-      "limite_tdc":"53411",
-      "email_generador":"jacob.mendoza@banregio.com"};
-
+/*
+* Modelo de Solicitud
+*
+*/
 function Solicitud (data) {
 
   this.id = data.id; 

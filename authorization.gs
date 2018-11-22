@@ -1,18 +1,25 @@
 
-function is_authorized() {
-  var data = {};
-  var sheetWhiteList = db.getSheetByName("users");
-  var user = Session.getActiveUser();
-  var user_email = user.getEmail();
-  data.records = _readData(sheetWhiteList);
-  
-  for (var r = 0, l = data.records.length; r < l; r++) {
-    if (data.records[r].email === user_email) {
+function User(user) {
+  this._user = user;
+}
+
+// tabla de usuarios
+User.prototype._sheet = db.getSheetByName("users");
+
+// validacion de autorizacion
+User.prototype.is_authorized = function() {
+  var user_email = this.getEmail();
+  var records = _readData(this._sheet);  
+  for (var r = 0, l = records.length; r < l; r++) {
+    if (records[r].email === user_email) {
       return true
     }
   }
-  
-  Logger.log(data);
-  Logger.log('done!');
   return false;
 }
+
+// email de usuario
+User.prototype.getEmail = function() {
+  return this._user.getEmail();
+}
+
