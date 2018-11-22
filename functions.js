@@ -1,4 +1,4 @@
-var datos = {
+var data = {
       "id":"10",
       "nom_solicitante":"Jacob Mendoza",
       "num_cliente":"248907",
@@ -20,7 +20,43 @@ var datos = {
       "limite_tdc":"53411",
       "email_generador":"jacob.mendoza@banregio.com"};
 
+/*const solicitud = function (data) {
+  this.data = data;
+}
+
+var new_sol = new solicitud(data)
+
+new_sol.prototype.edad = function(){
+  var fecha = new Date();
+  var Fecha_Nac = new Date(this.data.fecha_nac);
+     
+     // Calculo de Edad
+  if(Fecha_Nac.getDate() > fecha.getDate()){
+    return var_Edad = (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1) - 1;
+  }else{
+    return var_Edad = (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1);
+  }
+}*/
+
+
+
+
+function edad(data) {
+  var fecha = new Date();
+  var Fecha_Nac = new Date(data.fecha_nac);
+     
+     // Calculo de Edad
+  if(Fecha_Nac.getDate() > fecha.getDate()){
+    return var_Edad = (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1) - 1;
+  }else{
+    return var_Edad = (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1);
+  }
+}
+
+
 function procesar_datos() {
+
+  var a = this.edad(this.data);
 
   if(this.datos.exp_rev == "1" && this.datos.num_tar < 7  &&  this.datos.tar_banregio == "0"){
      var fecha = new Date();
