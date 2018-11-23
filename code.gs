@@ -16,7 +16,7 @@ function doGet(req) {
     return HtmlService.createHtmlOutputFromFile('index');
   }
   else {
-    return HtmlService.createHtmlOutputFromFile('index');
+    return HtmlService.createHtmlOutputFromFile('noacceso');
   }        
 }
 
