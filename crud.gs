@@ -55,6 +55,7 @@ function insert(data) {
           data.score_parametrico,
           data.alerta_rechazo,
           data.bc_score,
+          data.numero_cuentas,
           data.limite_tdc,
           data.email_generador
           //user.getEnail()
@@ -76,12 +77,11 @@ function insert(data) {
       var currentTime = new Date().toLocaleString(); // Full Datetime
       
 
+      
+      // obtener siguiente id
       var sheetConfigs = db.getSheetByName("configs");
-
-      var configs = _readData(sheetConfigs);
-     
-     var auto_inc = configs[0];
-
+      var configs = _readData(sheetConfigs);     
+      var auto_inc = configs[0];
       var auto_inc_id = parseInt(auto_inc.value);
       sheetConfigs.getRange(2,2,1,1).setValue(auto_inc_id+1);
 
@@ -105,6 +105,7 @@ function insert(data) {
          data.score_parametrico,
          data.alerta_rechazo,
          data.bc_score,
+         data.numero_cuentas,
          data.limite_tdc,
          data.email_generador
          //user.getEnail()
