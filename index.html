@@ -317,7 +317,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           //producto_ori: null,
           solicitud_ori: null,
           exp_rev: null,
-          num_tar: null,
+          num_cred_rev: null,
           tar_banregio: null, 
           ingreso_neto: null,
           capacidad_pago: null,
@@ -329,9 +329,38 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         }
       },
       computed: {
+         exp_rev () {
+          if (this.solicitud.num_cred_rev == null | this.solicitud.bc_score == null | !this.avanza()) {return null;}
+          if (  this.solicitud.num_cred_rev > 0  ) {
+            return 0; // con experiencia revolvente 
+          }
+          else if (this.solicitud.bc_score == -8 | this.solicitud.bc_score == -9) {
+            return 2; // sin experiencia de credito
+          }
+          else {
+            return 1; // sin experiencia revolvente
+          }
+        },
+
+        step1_filled () {
+          return !(this.solicitud.solicitud_ori == null | this.solicitud.tiene_tar_banregio == null | this.solicitud.decreto_auto == null | this.solicitud.num_cred_rev== null);
+
+        },
+
+
+        avanza () {
+          return (this.solicitud.tiene_tar_banregio == "0" && this.solicitud.decreto_auto == "1" && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
+        },
+
+
+
+        alerta_rechazo () {
+          return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? this.solicitud.alerta | this.solicitud.rechazo : null;
+        },
+
         show_form () {
             var  avanza = 0;
-            if(this.nueva_solicitud.tar_banregio === "1" || this.nueva_solicitud.decision_final == "0" || this.nueva_solicitud.num_tar > 6){
+            if(this.nueva_solicitud.tar_banregio === "1" || this.nueva_solicitud.decision_final == "0" || this.nueva_solicitud.num_cred_rev > 6){
               var  avanza = 0;
             
             }else{
@@ -474,7 +503,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </div>
                                               <div class="form-group col-md-4">
                                                 <label>N&uacute;mero de cr&eacute;ditos revolventes activos: </label>
-                                                <input class="form-control" type="number" min="1"  id="num_tar" name="num_tar" v-model="nueva_solicitud.num_tar"/>
+                                                <input class="form-control" type="number" min="1"  id="num_cred_rev" name="num_cred_rev" v-model="nueva_solicitud.num_cred_rev"/>
                                               </div>
                                         </div>
                                         <div class="form-row">
