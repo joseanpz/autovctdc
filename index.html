@@ -316,7 +316,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           fecha_solicitud: null,
           //producto_ori: null,
           solicitud_ori: null,
-          exp_rev: null,
+          // exp_rev: null,
           num_cred_rev: null,
           tar_banregio: null, 
           ingreso_neto: null,
@@ -330,25 +330,24 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         }
       },
       computed: {
-         exp_rev () {
+        exp_rev () {
 
            console.log("in exp rev");
            console.log(this.solicitud.num_cred_rev);
            console.log(this.solicitud.bc_score);
            //console.log(this.solicitud.num_cred_rev);
            
-          if (this.solicitud.num_cred_rev == null || this.solicitud.bc_score == null || !this.avanza) {return null;}
-          if (  this.solicitud.num_cred_rev > 0  ) {
-            return 0; // con experiencia revolvente 
-          }
-          else if (this.solicitud.bc_score == -8 || this.solicitud.bc_score == -9) {
-            return 2; // sin experiencia de credito
-          }
-          else {
-            return 1; // sin experiencia revolvente
-          }
+            if (this.solicitud.num_cred_rev == null || this.solicitud.bc_score == null || !this.avanza) {return null;}
+            if (  this.solicitud.num_cred_rev > 0  ) {
+              return 0; // con experiencia revolvente 
+            }
+            else if (this.solicitud.bc_score == -8 || this.solicitud.bc_score == -9) {
+              return 2; // sin experiencia de credito
+            }
+            else {
+              return 1; // sin experiencia revolvente
+            }
         },
-
 
         avanza () {
            ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
@@ -356,10 +355,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
            console.log(this.solicitud.decision_final);
            console.log(this.solicitud.num_cred_rev);
            console.log(ret);
-          return ret;
+           return ret;
         },
-
-
 
         alerta_rechazo () {
           console.log("alerta rechazo");
@@ -425,18 +422,20 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               }else{
                 return  0;
               }
-          },
-          topeMaximoEdad(){
-            var edad_anio =  Math.floor(parseInt(this.solicitud.edad)/12);
-             if(edad_anio < 25){
-               return  15000;
-             }else if(edad_anio <=45){
-               return  40000;
-             }else{
-               return  60000;
-             }
+        },
+
+        topeMaximoEdad(){
+          var edad_anio =  Math.floor(parseInt(this.solicitud.edad)/12);
+           if(edad_anio < 25){
+             return  15000;
+           }else if(edad_anio <=45){
+             return  40000;
+           }else{
+             return  60000;
+           }
 
         },
+
         edad() {
             var fecha = new Date();
             var Fecha_Nac = new Date(this.solicitud.fecha_nac);
@@ -446,54 +445,52 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             }else{
               return (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1);
             }
+        },
 
-          },
-          topeMaximoIngreso (){
-              if(this.exp_rev==2){
-                return this.solicitud.ingreso_neto;
-              }else{
-                return  1.5 * this.solicitud.ingreso_neto;
-              }
-            
-          },
-          factPorcentajeProm (){
-              if(this.exp_rev == 0){
-                if(this.solicitud.score_parametrico <=450){
-                   return  0.8;
-                }else if(this.solicitud.score_parametrico >=950){
-                   return  1.2;
-                }else{
-                   return  0.00895743 * 0.093467212 * Math.exp(0.006534714 * this.solicitud.score_parametrico) + 0.78415333;
-                }
-              }else{
-                return 0;
-              }
-          },
-          limitePromedio(){
-           
-            if(this.exp_rev == 0){
-                return  this.solicitud.limite_tdc / this.solicitud.num_cred_rev;
-              }else{
-                return  0;
-              }
-
-          },
-        /*show_form () {
-            var  avanza = 0;
-            if(this.solicitud.tar_banregio === "1" || this.solicitud.decision_final == "0" || this.solicitud.num_cred_rev > 6){
-              var  avanza = 0;
-            
+        topeMaximoIngreso (){
+            if(this.exp_rev==2){
+              return this.solicitud.ingreso_neto;
             }else{
-              avanza = 1;
-            }
-             console.log(avanza);
-          return avanza === 1;
+              return  1.5 * this.solicitud.ingreso_neto;
+            }          
+        },
 
-        }*/
+        factPorcentajeProm (){
+            if(this.exp_rev == 0){
+              if(this.solicitud.score_parametrico <=450){
+                 return  0.8;
+              }else if(this.solicitud.score_parametrico >=950){
+                 return  1.2;
+              }else{
+                 return  0.00895743 * 0.093467212 * Math.exp(0.006534714 * this.solicitud.score_parametrico) + 0.78415333;
+              }
+            }else{
+              return 0;
+            }
+        },
+
+        limitePromedio(){
+         
+          if(this.exp_rev == 0){
+              return  this.solicitud.limite_tdc / this.solicitud.num_cred_rev;
+            }else{
+              return  0;
+            }
+
+        },
       },
+
       created: function () {
         this.read()
       },
+      watch: {
+        avanza: function(newavanza, oldavanza) {
+          if (newavanza){
+            this.insert();
+          }
+        }
+      },
+
       methods: {
         read: function () {
           var self = this;
@@ -506,12 +503,16 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               console.log(err);
             })
             .read()
-        },
+        }, 
+
         insert: function() {
           var self = this;
+          this.solicitud.decreto = this.decreto;
+          this.solicitud.linea_asignada = this.linea_asignada;
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
+              this.solicitud = response.data;
               self.read();           
             })
             .withFailureHandler(function(err){
@@ -519,6 +520,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             })
             .insert(this.solicitud);
         },
+
         crea_doc: function(){
           var self = this;
           google.script.run
@@ -530,9 +532,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               console.log(err);
             })
             .crear_file();
-    } 
-      }
-    
+        } 
+      }    
     });
   }
   
@@ -590,7 +591,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                   <div class = "col-sm-12">
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
-                                              <label> Fecha de la evaluaci&oacute;n: </label>
+                                              <label> Fecha de la evaluaci&oacute;n: {{solicitud.fecha_solicitud}} </label>
                                               <input type="date" class="form-control" value="" readonly="" v-model="solicitud.fecha_solicitud" >
                                             </div>
                                             <div class="form-group col-md-6"></div>
@@ -785,9 +786,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                   <thead>
                     <tr>
                       <th>Id</th>
-                      <th>Producto origen</th>
-                      <th>Solicitante</th>
-                      <th>Ejecutivo</th>
+                      <th>Número de solicitud Auto</th>
+                      <th>Decreto</th>
+                      <th>Línea asignada</th>
                       <th></th>
                      </tr>
                   </thead>
@@ -795,9 +796,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                     <tr v-for="solicitud in solicitudes" >
                       <td>{{solicitud.id}}</td>
-                      <td>{{solicitud.producto_ori}}</td>
-                      <td>{{solicitud.nom_solicitante}}</td>
-                      <td>{{solicitud.nom_ejecutivo}}</td>
+                      <td>{{solicitud.solicitud_ori}}</td>
+                      <td>{{solicitud.decreto}}</td>
+                      <td>{{solicitud.linea_asignada}}</td>
                       <td><button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button></td>
                     </tr>
                   

@@ -71,13 +71,16 @@ function insert(data) {
           data.fecha_solicitud,
           //producto_ori: null,
           data.solicitud_ori,
-          data.exp_rev,
+          data.decreto,
+          data.linea_asignada,
+          // data.exp_rev,
           data.num_cred_rev,
           data.tar_banregio, 
           data.ingreso_neto,
           data.capacidad_pago,
           data.score_parametrico,
-          data.alerta_rechazo,
+          data.alerta,
+          data.rechazo,
           data.bc_score,
           data.limite_tdc,
           data.email_generador
@@ -106,10 +109,11 @@ function insert(data) {
       var auto_inc = configs[0];
       var auto_inc_id = parseInt(auto_inc.value);
       sheetConfigs.getRange(2,2,1,1).setValue(auto_inc_id+1);
+      data.id = auto_inc_id;
 
 
       var rowData = sheetSolicitudes.appendRow([
-       auto_inc_id,
+       //auto_inc_id,
        /*data.nom_solicitante,
        data.num_cliente,
        data.fecha_nac,
@@ -131,9 +135,12 @@ function insert(data) {
        data.limite_tdc,
        data.email_generador*/
        //user.getEnail()
-       
+
      // nom_solicitante: null,
       //num_cliente: null,
+        data.id,
+       // nom_solicitante: null,
+        //num_cliente: null,
         data.decision_final,
         data.fecha_nac,
         //nom_ejecutivo: null,
@@ -142,13 +149,16 @@ function insert(data) {
         data.fecha_solicitud,
         //producto_ori: null,
         data.solicitud_ori,
-        data.exp_rev,
+        data.decreto,
+        data.linea_asignada,
+        // data.exp_rev,
         data.num_cred_rev,
         data.tar_banregio, 
         data.ingreso_neto,
         data.capacidad_pago,
         data.score_parametrico,
-        data.alerta_rechazo,
+        data.alerta,
+        data.rechazo,
         data.bc_score,
         data.limite_tdc,
         data.email_generador
@@ -156,11 +166,12 @@ function insert(data) {
       ]);
 
 
-      var result = "Insertion successful";
+      var message = "Insertion successful";
    }
 
    return {
-      result: result
+      message: message,
+      data: data
    };
 }
 
