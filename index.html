@@ -336,11 +336,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
            console.log(this.solicitud.bc_score);
            //console.log(this.solicitud.num_cred_rev);
            
-          if (this.solicitud.num_cred_rev == null | this.solicitud.bc_score == null | !this.avanza) {return null;}
+          if (this.solicitud.num_cred_rev == null || this.solicitud.bc_score == null || !this.avanza) {return null;}
           if (  this.solicitud.num_cred_rev > 0  ) {
             return 0; // con experiencia revolvente 
           }
-          else if (this.solicitud.bc_score == -8 | this.solicitud.bc_score == -9) {
+          else if (this.solicitud.bc_score == -8 || this.solicitud.bc_score == -9) {
             return 2; // sin experiencia de credito
           }
           else {
@@ -369,8 +369,83 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? this.solicitud.alerta | this.solicitud.rechazo : null;
         },
 
-        linea_asignada () {return null;},
+        linea_asignada () {
+            if(this.exp_rev==2){
+                  return   Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000);
+              }else if(this.exp_rev == 0){
+                  return  Math.max(Math.min(this.factPorcentajeProm * this.limitePromedio, 250000),5000);
+              }else{
+                  return  Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000);
+              }
 
+          },
+          factorVecesCap(){
+              if(this.exp_rev == 1 || this.exp_rev==2){
+                  if(this.solicitud.score_parametrico <= 450){
+                    return  2;
+                  }else if(this.solicitud.score_parametrico >= 950){
+                    return  10;
+                  }else{
+                    return  0.17914852 * 0.093467212 * Math.exp(0.006534714 * this.solicitud.score_parametrico) +  1.68306653;
+                  }
+                
+              }else{
+                return  0;
+              }
+          },
+          topeMaximoEdad(){
+            var edad_anio =  Math.floor(parseInt(this.solicitud.edad)/12);
+             if(edad_anio < 25){
+               return  15000;
+             }else if(edad_anio <=45){
+               return  40000;
+             }else{
+               return  60000;
+             }
+
+        },
+        edad() {
+            var fecha = new Date();
+            var Fecha_Nac = new Date(this.solicitud.fecha_nac);
+               
+            if(Fecha_Nac.getDate() > fecha.getDate()){
+              return  (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1) - 1;
+            }else{
+              return (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1);
+            }
+
+          },
+          topeMaximoIngreso (){
+              if(this.exp_rev==2){
+                return this.solicitud.ingreso_neto;
+              }else{
+                return  1.5 * this.solicitud.ingreso_neto;
+              }
+            
+          },
+          factPorcentajeProm (){
+              if(this.exp_rev == 0){
+                if(this.solicitud.score_parametrico <=450){
+                   return  0.8;
+                }else if(this.solicitud.score_parametrico >=950){
+                   return  1.2;
+                }else{
+                   return  0.00895743 * 0.093467212 * Math.exp(0.006534714 * this.solicitud.score_parametrico) + 0.78415333;
+                }
+              }else{
+                return 0;
+              }
+          },
+          limitePromedio(){
+            var limit_credito = this.solicitud.limite_tdc / this.solicitud.num_cred_rev;
+
+            if(this.exp_rev == 0){
+                return  limit_credito/this.solicitud.num_cred_rev;
+              }else{
+                return  0;
+              }
+
+          },
         /*show_form () {
             var  avanza = 0;
             if(this.solicitud.tar_banregio === "1" || this.solicitud.decision_final == "0" || this.solicitud.num_cred_rev > 6){
