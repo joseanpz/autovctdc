@@ -37,7 +37,7 @@ function insert(data) {
          flag = 0;
         
         sheetSolicitudes.getRange(i, 1, 1, sheetSolicitudes.getLastColumn()).setValues([[
-          data.id,
+          /*data.id,
           data.nom_solicitante,
           data.num_cliente,
           data.fecha_nac,
@@ -57,8 +57,30 @@ function insert(data) {
           data.bc_score,
           data.numero_cuentas,
           data.limite_tdc,
-          data.email_generador
+          data.email_generador*/
           //user.getEnail()
+
+          data.id,
+         // nom_solicitante: null,
+          //num_cliente: null,
+          data.decision_final,
+          data.fecha_nac,
+          //nom_ejecutivo: null,
+          //sucursal: null,
+          //facultado: null,
+          data.fecha_solicitud,
+          //producto_ori: null,
+          data.solicitud_ori,
+          data.exp_rev,
+          data.num_cred_rev,
+          data.tar_banregio, 
+          data.ingreso_neto,
+          data.capacidad_pago,
+          data.score_parametrico,
+          data.alerta_rechazo,
+          data.bc_score,
+          data.limite_tdc,
+          data.email_generador
         ]])
         var result = "Update successful";
         break;         
@@ -87,28 +109,50 @@ function insert(data) {
 
 
       var rowData = sheetSolicitudes.appendRow([
-         auto_inc_id,
-         data.nom_solicitante,
-         data.num_cliente,
-         data.fecha_nac,
-         data.nom_ejecutivo,
-         data.sucursal,
-         data.facultado,
-         data.fecha_solicitud,
-         data.producto_ori,
-         data.solicitud_ori,
-         data.exp_rev,
-         data.num_tar,
-         data.tar_banregio,
-         data.ingreso_neto,
-         data.capacidad_pago,
-         data.score_parametrico,
-         data.alerta_rechazo,
-         data.bc_score,
-         data.numero_cuentas,
-         data.limite_tdc,
-         data.email_generador
-         //user.getEnail()
+       auto_inc_id,
+       /*data.nom_solicitante,
+       data.num_cliente,
+       data.fecha_nac,
+       data.nom_ejecutivo,
+       data.sucursal,
+       data.facultado,
+       data.fecha_solicitud,
+       data.producto_ori,
+       data.solicitud_ori,
+       data.exp_rev,
+       data.num_tar,
+       data.tar_banregio,
+       data.ingreso_neto,
+       data.capacidad_pago,
+       data.score_parametrico,
+       data.alerta_rechazo,
+       data.bc_score,
+       data.numero_cuentas,
+       data.limite_tdc,
+       data.email_generador*/
+       //user.getEnail()
+       
+     // nom_solicitante: null,
+      //num_cliente: null,
+        data.decision_final,
+        data.fecha_nac,
+        //nom_ejecutivo: null,
+        //sucursal: null,
+        //facultado: null,
+        data.fecha_solicitud,
+        //producto_ori: null,
+        data.solicitud_ori,
+        data.exp_rev,
+        data.num_cred_rev,
+        data.tar_banregio, 
+        data.ingreso_neto,
+        data.capacidad_pago,
+        data.score_parametrico,
+        data.alerta_rechazo,
+        data.bc_score,
+        data.limite_tdc,
+        data.email_generador
+
       ]);
 
 
