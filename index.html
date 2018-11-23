@@ -304,7 +304,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       el: '#solicitud-app',
       data: {
         solicitudes: [],
-        nueva_solicitud: {
+        solicitud: {
           id: null,
          // nom_solicitante: null,
           //num_cliente: null,
@@ -330,7 +330,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       },
       computed: {
          exp_rev () {
-          if (this.solicitud.num_cred_rev == null | this.solicitud.bc_score == null | !this.avanza()) {return null;}
+
+           console.log("in exp rev");
+           console.log(this.solicitud.num_cred_rev);
+           console.log(this.solicitud.bc_score);
+           //console.log(this.solicitud.num_cred_rev);
+           
+          if (this.solicitud.num_cred_rev == null | this.solicitud.bc_score == null | !this.avanza) {return null;}
           if (  this.solicitud.num_cred_rev > 0  ) {
             return 0; // con experiencia revolvente 
           }
@@ -343,13 +349,18 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         },
 
         step1_filled () {
-          return !(this.solicitud.solicitud_ori == null | this.solicitud.tiene_tar_banregio == null | this.solicitud.decreto_auto == null | this.solicitud.num_cred_rev== null);
+          return !(this.solicitud.solicitud_ori == null | this.solicitud.tar_banregio == null | this.solicitud.decreto_auto == null | this.solicitud.num_cred_rev== null);
 
         },
 
 
         avanza () {
-          return (this.solicitud.tiene_tar_banregio == "0" && this.solicitud.decreto_auto == "1" && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
+           ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
+           console.log(this.solicitud.tar_banregio);
+           console.log(this.solicitud.decision_final);
+           console.log(this.solicitud.num_cred_rev);
+           console.log(ret);
+          return ret;
         },
 
 
@@ -358,9 +369,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? this.solicitud.alerta | this.solicitud.rechazo : null;
         },
 
-        show_form () {
+        linea_asignada () {return null;},
+
+        /*show_form () {
             var  avanza = 0;
-            if(this.nueva_solicitud.tar_banregio === "1" || this.nueva_solicitud.decision_final == "0" || this.nueva_solicitud.num_cred_rev > 6){
+            if(this.solicitud.tar_banregio === "1" || this.solicitud.decision_final == "0" || this.solicitud.num_cred_rev > 6){
               var  avanza = 0;
             
             }else{
@@ -369,7 +382,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
              console.log(avanza);
           return avanza === 1;
 
-        }
+        }*/
       },
       created: function () {
         this.read()
@@ -397,7 +410,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             .withFailureHandler(function(err){
               console.log(err);
             })
-            .insert(this.nueva_solicitud);
+            .insert(this.solicitud);
         },
         crea_doc: function(){
           var self = this;
@@ -471,12 +484,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
                                               <label> Fecha de la evaluaci&oacute;n: </label>
-                                              <input type="date" class="form-control" value="" readonly="" v-model="nueva_solicitud.fecha_solicitud" >
+                                              <input type="date" class="form-control" value="" readonly="" v-model="solicitud.fecha_solicitud" >
                                             </div>
                                             <div class="form-group col-md-6"></div>
                                             <div class="form-group col-md-3">
                                                <label> N&uacute;mero de solicitud auto: </label>
-                                               <input class="form-control" maxlength="8" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="nueva_solicitud.solicitud_ori"/>
+                                               <input class="form-control" maxlength="8" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="solicitud.solicitud_ori"/>
                                              </div>   
                                          </div>
                                         
@@ -487,7 +500,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                                               <div class="form-group col-md-4">
                                               <label>Cuenta con tarjeta Banregio: </label>
-                                              <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="nueva_solicitud.tar_banregio">
+                                              <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="solicitud.tar_banregio">
                                                 <option value="3" selected="">--- seleccione--- </option>
                                                 <option value="1">Si</option>
                                                 <option value="0">No</option>
@@ -495,7 +508,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>Decisi&oacute;n final cr&eacute;dito automotriz: </label>
-                                                <select id="decision_final" name="decision_final" class="form-control" v-model="nueva_solicitud.decision_final" >
+                                                <select id="decision_final" name="decision_final" class="form-control" v-model="solicitud.decision_final" >
                                                 <option value="3" selected="">--- seleccione--- </option>
                                                 <option value="1">Autorizado</option>
                                                 <option value="0">Rechazado</option>
@@ -503,103 +516,120 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </div>
                                               <div class="form-group col-md-4">
                                                 <label>N&uacute;mero de cr&eacute;ditos revolventes activos: </label>
-                                                <input class="form-control" type="number" min="1"  id="num_cred_rev" name="num_cred_rev" v-model="nueva_solicitud.num_cred_rev"/>
+                                                <input class="form-control" type="number" min="1"  id="num_cred_rev" name="num_cred_rev" v-model="solicitud.num_cred_rev"/>
                                               </div>
                                         </div>
-                                        <div class="form-row">
+                                        <!--<div class="form-row">
                                           <input type="button" name="" value="Avanzar" v-on:click='show_form' class="btn btn-success">
 
-                                        </div>
+                                        </div>-->
 
                                         <hr style="border: 2px solid gray;"/>
-                                        <div v-if="show_form">
+                                        <div v-if="avanza">
                                           <div class="form-row">
                                             <div class="form-group col-md-12"><h5>Perfil de riesgo</h5></div>
                                           <div class="form-group col-md-4">
                                               <label>Scoring modelo parametrico:</label>
-                                              <input type="number" maxlength="4" id="score_parametrico" name="score_parametrico" class="form-control" v-model="nueva_solicitud.score_parametrico">
+                                              <input type="number" maxlength="4" id="score_parametrico" name="score_parametrico" class="form-control" v-model="solicitud.score_parametrico">
                                             </div>
                                             <div class="form-group col-md-4"></div>
                                             <div class="form-group col-md-4">
                                               <label> BC Score:</label>
-                                              <input type="text" maxlength="4" id="bc_score" name="bc_score" class="form-control" v-model="nueva_solicitud.bc_score">
+                                              <input type="text" maxlength="4" id="bc_score" name="bc_score" class="form-control" v-model="solicitud.bc_score">
                                             </div>
                                             
                                                                                         
                                           </div>
-                                          <hr style="border: 1px solid green;"/>
-                                          <div  id="con_experiencia" class="form-row">
-                                            <div class="form-group col-md-12"><h5>Grupo con Experiencia Revolvente</h5></div>
-                                             <div class="form-group col-md-4">
-                                              <label>L&iacute;mite de cr&eacute;dito de cuentas revolventes activas:</label>
-                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="nueva_solicitud.limite_tdc">
+                                          <div v-if="exp_rev === 0">
+                                            <hr style="border: 1px solid green;"/>
+                                            <div  id="con_experiencia" class="form-row">
+                                              <div class="form-group col-md-12"><h5>Grupo con Experiencia Revolvente</h5></div>
+                                               <div class="form-group col-md-4">
+                                                <label>L&iacute;mite de cr&eacute;dito de cuentas revolventes activas:</label>
+                                                <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="solicitud.limite_tdc">
+                                              </div>                                            
                                             </div>
-                                            
                                           </div>
+                                          <div v-else-if="exp_rev >= 1">
+                                            <hr style="border: 1px solid green;"/>
+                                            <div  id="sin_experiencia" class="form-row">
+                                              <div class="form-group col-md-12"><h5>Grupo sin Experiencia Revolvente</h5></div>
+                                               <div class="form-group col-md-4">
+                                                <label>Capacidad de pago final:</label>
+                                                <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="solicitud.capacidad_pago">               
+                                              </div>
+                                              <div class="form-group col-md-4"></div>
+                                               <div class="form-group col-md-4">
+                                                <label>Ingreso neto disponible:</label>
+                                                <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
+                                              </div>
+                                              <div v-if="exp_rev == 2">
+                                                <div class="form-group col-md-4">
+                                                  <label>Fecha nacimiento del solicitante:</label>
+                                                  <input type="date" id="fecha_nac" name="fecha_nac" class="form-control" >
+                                                </div>
+                                              </div>                                               
+                                            </div>
+                                          </div>
+                                          <div v-else>
+                                            No se ha estimado la experiencia revolvente                                         
+                                          </div> 
 
-                                          <hr style="border: 1px solid green;"/>
-                                          <div  id="sin_experiencia" class="form-row">
-                                            <div class="form-group col-md-12"><h5>Grupo sin Experiencia Revolvente</h5></div>
-                                             <div class="form-group col-md-4">
-                                              <label>Capacidad de pago final:</label>
-                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="nueva_solicitud.capacidad_pago">               
-                                            </div>
-                                            <div class="form-group col-md-4"></div>
-                                             <div class="form-group col-md-4">
-                                              <label>Ingreso neto disponible:</label>
-                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="nueva_solicitud.ingreso_neto">
-                                            </div> 
-                                            
-                                          </div>
+                                          <!-- 
                                           <hr style="border: 1px solid green;"/>
                                           <div  id="sin_experiencia" class="form-row">
                                             <div class="form-group col-md-12"><h5>Grupo sin Experiencia de cr&eacute;dito</h5></div>
                                              <div class="form-group col-md-4">
                                               <label>Capacidad de pago final:</label>
-                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="nueva_solicitud.capacidad_pago">               
+                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="solicitud.capacidad_pago">               
                                             </div>
                                              <div class="form-group col-md-4">
                                               <label>Ingreso neto disponible:</label>
-                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="nueva_solicitud.ingreso_neto">
+                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
                                             </div> 
                                             <div class="form-group col-md-4">
                                               <label>Fecha nacimiento del solicitante:</label>
                                               <input type="date" id="fecha_nac" name="fecha_nac" class="form-control" >
                                             </div>
                                             
-                                          </div>
-                                          <hr style="border: 1px solid green;"/>
-                                          <div  id="" class="form-row">
-                                            <div class="form-group col-md-12"><h5>Variables Alerta/Rechazo</h5> </div>
-                                            <div class="form-group col-md-6">
-                                               
+                                          </div> -->
 
-                                              <div class="form-group col-md-12">
-                                              <label>Presenta variable de alerta diferente a capacidad de pago insuficiente:</label>
-                                              <select id="var_alerta" class="form-control">
-                                                  <option value="3">-- Seleccione---</option>
-                                                  <option value="1">Si</option>  
-                                                  <option value="0">No</option>  
-                                              </select>
-                                            </div>
-                                            
-                                              
-                                           
-                                            </div>
+                                          <div v-if="linea_asignada != null">
+                                            <hr style="border: 1px solid green;"/>
+                                            <div  id="" class="form-row">
+                                              <div class="form-group col-md-12"><h5>Variables Alerta/Rechazo</h5> </div>
+                                              <div class="form-group col-md-6">
+                                                 
 
-                                            <div class="form-group col-md-6">
-                                              <div class="form-group col-md-12">
-                                              <label>Presenta variable de rechazo diferente a capacidad de pago nula:<br/><br/></label>
+                                                <div class="form-group col-md-12">
+                                                <label>Presenta variable de alerta diferente a capacidad de pago insuficiente:</label>
+                                                <select id="var_alerta" class="form-control">
+                                                    <option value="3">-- Seleccione---</option>
+                                                    <option value="1">Si</option>  
+                                                    <option value="0">No</option>  
+                                                </select>
+                                              </div>
                                               
-                                              <select id="var_rechazo" class="form-control">
-                                                  <option value="3">-- Seleccione---</option>
-                                                  <option value="1">Si</option>  
-                                                  <option value="0">No</option>  
-                                              </select>
+                                                
+                                             
+                                              </div>
+
+                                              <div class="form-group col-md-6">
+                                                <div class="form-group col-md-12">
+                                                <label>Presenta variable de rechazo diferente a capacidad de pago nula:<br/><br/></label>
+                                                
+                                                <select id="var_rechazo" class="form-control">
+                                                    <option value="3">-- Seleccione---</option>
+                                                    <option value="1">Si</option>  
+                                                    <option value="0">No</option>  
+                                                </select>
+                                              </div>
+                                              </div>
+                                                
                                             </div>
-                                            </div>
-                                              
                                           </div>
+
+
                                           <hr style="border: 1px solid green;"/>
                                           <div  id="" class="form-row">
                                               <div class="form-group col-md-12"><h5>Resultado de evaluaci&oacute;n:</h5></div>
