@@ -527,6 +527,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             .insert(this.solicitud);
         },
 
+        edit: function(id) {
+          var self = this;
+          console.log('editing');
+          this.solicitud = this.solicitudes.find(row => row.id == id);
+        },
+
         crea_doc: function(){
           var self = this;
           google.script.run
