@@ -512,7 +512,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
-              this.solicitud = response.data;
+              self.solicitud = response.data;
               self.read();           
             })
             .withFailureHandler(function(err){
