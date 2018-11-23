@@ -322,7 +322,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           ingreso_neto: null,
           capacidad_pago: null,
           score_parametrico: null,
-          alerta_rechazo: null,
+          alerta: null,
+          rechazo: null,
           bc_score: null,
           limite_tdc: null,
           email_generador: null
@@ -348,11 +349,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           }
         },
 
-        step1_filled () {
-          return !(this.solicitud.solicitud_ori == null | this.solicitud.tar_banregio == null | this.solicitud.decreto_auto == null | this.solicitud.num_cred_rev== null);
-
-        },
-
 
         avanza () {
            ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
@@ -366,10 +362,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 
         alerta_rechazo () {
-          return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? this.solicitud.alerta | this.solicitud.rechazo : null;
+          return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? (this.solicitud.alerta || this.solicitud.rechazo) : null;
         },
 
         linea_asignada () {
+          if (this.exp_rev == null || this.solicitud.score_parametrico == null || this.solicitud.bc_score == null ) {return null;}
             if(this.exp_rev==2){
                   return   Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000);
               }else if(this.exp_rev == 0){
@@ -377,9 +374,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               }else{
                   return  Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000);
               }
+          }
 
           },
-          factorVecesCap(){
+
+        decreto () {return null;},
+        
+        factorVecesCap(){
               if(this.exp_rev == 1 || this.exp_rev==2){
                   if(this.solicitud.score_parametrico <= 450){
                     return  2;
@@ -625,7 +626,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </div>                                            
                                             </div>
                                           </div>
-                                          <div v-else-if="exp_rev >= 1">
+                                          <div v-else-if="exp_rev == 1">
                                             <hr style="border: 1px solid green;"/>
                                             <div  id="sin_experiencia" class="form-row">
                                               <div class="form-group col-md-12"><h5>Grupo sin Experiencia Revolvente</h5></div>
@@ -638,18 +639,29 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                 <label>Ingreso neto disponible:</label>
                                                 <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
                                               </div>
-                                              <div v-if="exp_rev == 2">
-                                                <div class="form-group col-md-4">
-                                                  <label>Fecha nacimiento del solicitante:</label>
-                                                  <input type="date" id="fecha_nac" name="fecha_nac" class="form-control" >
-                                                </div>
-                                              </div>                                               
+                                                                                            
                                             </div>
                                           </div>
-                                          <div v-else>
-                                            No se ha estimado la experiencia revolvente                                         
+                                          
+                                          <div v-if="exp_rev == 2">
+                                            <hr style="border: 1px solid green;"/>
+                                            <div  id="sin_experiencia" class="form-row">
+                                              <div class="form-group col-md-12"><h5>Grupo sin Experiencia de cr&eacute;dito</h5></div>
+                                               <div class="form-group col-md-4">
+                                                <label>Capacidad de pago final:</label>
+                                                <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="solicitud.capacidad_pago">               
+                                              </div>
+                                               <div class="form-group col-md-4">
+                                                <label>Ingreso neto disponible:</label>
+                                                <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
+                                              </div> 
+                                              <div class="form-group col-md-4">
+                                                <label>Fecha nacimiento del solicitante:</label>
+                                                <input type="date" id="fecha_nac" name="fecha_nac" class="form-control" v-model="solicitud.fecha_nac">
+                                              </div>                                              
+                                            </div>
+                                            
                                           </div> 
-
                                           <!-- 
                                           <hr style="border: 1px solid green;"/>
                                           <div  id="sin_experiencia" class="form-row">
@@ -669,6 +681,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             
                                           </div> -->
 
+                                          <div v-else>
+                                            No se ha estimado la experiencia revolvente                                         
+                                          </div> 
+
                                           <div v-if="linea_asignada != null">
                                             <hr style="border: 1px solid green;"/>
                                             <div  id="" class="form-row">
@@ -678,7 +694,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                                                 <div class="form-group col-md-12">
                                                 <label>Presenta variable de alerta diferente a capacidad de pago insuficiente:</label>
-                                                <select id="var_alerta" class="form-control">
+                                                <select id="var_alerta" class="form-control" v-model="solicitud.alerta">
                                                     <option value="3">-- Seleccione---</option>
                                                     <option value="1">Si</option>  
                                                     <option value="0">No</option>  
@@ -693,7 +709,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                 <div class="form-group col-md-12">
                                                 <label>Presenta variable de rechazo diferente a capacidad de pago nula:<br/><br/></label>
                                                 
-                                                <select id="var_rechazo" class="form-control">
+                                                <select id="var_rechazo" class="form-control" v-model="solicitud.rechazo">
                                                     <option value="3">-- Seleccione---</option>
                                                     <option value="1">Si</option>  
                                                     <option value="0">No</option>  
@@ -711,13 +727,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                            <div class="form-group col-md-6">
                                               <div class="form-group col-md-12">
                                               <label>Decreto TDC venta cruzada:</label>
-                                              <input type="text" id="decreto_tdc" name="decreto_tdc" class="form-control" >
+                                              <input type="text" id="decreto_tdc" name="decreto_tdc" class="form-control" v-model="decreto" >
                                             </div>
                                            </div>  
                                            <div class="form-group col-md-6">
                                             <div class="form-group col-md-12">
                                               <label>L&iacute;nea asignada:</label>
-                                              <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" >
+                                              <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" v-model="linea_asignada">
                                             </div>
                                            </div>
                                           </div>
