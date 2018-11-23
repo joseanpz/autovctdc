@@ -376,21 +376,21 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                 return null;
               }
               else {
-                return  Math.max(Math.min(this.factPorcentajeProm * this.limitePromedio, 250000),5000);
+                return  Math.round(Math.max(Math.min(this.factPorcentajeProm * this.limitePromedio, 250000),5000));
               }
             }
             else if (this.exp_rev == 1) {
               if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null){
                 return null;
               }else {
-                return  Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000);
+                return  Math.round(Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000));
               }
             }
             else if (this.exp_rev == 2){
               if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null || this.solicitud.fecha_nac == null){
                 return null;
               }else {
-                return   Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000);
+                return   Math.round(Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000));
               }
             } else {return null;}
           }          
