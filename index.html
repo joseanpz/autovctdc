@@ -805,7 +805,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                       <td>{{solicitud.solicitud_ori}}</td>
                       <td>{{solicitud.decreto}}</td>
                       <td>{{solicitud.linea_asignada}}</td>
-                      <td><button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button></td>
+
+                      <td>
+                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='edit(solicitud.id)'>Editar</button>
+                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button>
+                      </td>
                     </tr>
                   
                   </tbody>
