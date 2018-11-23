@@ -351,7 +351,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 
         avanza () {
-           ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
+           ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
            console.log(this.solicitud.tar_banregio);
            console.log(this.solicitud.decision_final);
            console.log(this.solicitud.num_cred_rev);
@@ -362,23 +362,55 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 
         alerta_rechazo () {
-          return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? (this.solicitud.alerta || this.solicitud.rechazo) : null;
+          console.log("alerta rechazo");
+          console.log(this.solicitud.alerta);
+          console.log(this.solicitud.rechazo);
+          
+
+          return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? (this.solicitud.alerta == "1" || this.solicitud.rechazo == "1") : null;
         },
 
         linea_asignada () {
-          if (this.exp_rev == null || this.solicitud.score_parametrico == null || this.solicitud.bc_score == null ) {return null;}
-            if(this.exp_rev==2){
-                  return   Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000);
-              }else if(this.exp_rev == 0){
-                  return  Math.max(Math.min(this.factPorcentajeProm * this.limitePromedio, 250000),5000);
-              }else{
-                  return  Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000);
+          if (this.exp_rev == null || this.solicitud.score_parametrico == null || this.solicitud.bc_score == null ) {
+            return null;
+          } else {
+            if (this.exp_rev == 0) {
+              if (this.solicitud.limite_tdc == null){
+                return null;
               }
-          }
+              else {
+                return  Math.max(Math.min(this.factPorcentajeProm * this.limitePromedio, 250000),5000);
+              }
+            }
+            else if (this.exp_rev == 1) {
+              if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null){
+                return null;
+              }else {
+                return  Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000);
+              }
+            }
+            else if (this.exp_rev == 2){
+              if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null || this.solicitud.fecha_nac == null){
+                return null;
+              }else {
+                return   Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000);
+              }
+            } else {return null;}
+          }          
 
-          },
+        },
 
-        decreto () {return null;},
+        decreto (){
+         
+          if (this.linea_asignada == null || this.alerta_rechazo == null){return null;}
+          if(this.solicitud.score_parametrico <= "644" || (this.alerta_rechazo && this.solicitud.score_parametrico <= "739")){
+            return  "Revisión Facultado TDC";
+          }else if(this.solicitud.score_parametrico <= "739" || this.alerta_rechazo ){
+            return  "Revisión Analísta TDC";
+          }else{
+            return  "Pre aprobado";
+          } 
+        },
         
         factorVecesCap(){
               if(this.exp_rev == 1 || this.exp_rev==2){
@@ -438,10 +470,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               }
           },
           limitePromedio(){
-            var limit_credito = this.solicitud.limite_tdc / this.solicitud.num_cred_rev;
-
+           
             if(this.exp_rev == 0){
-                return  limit_credito/this.solicitud.num_cred_rev;
+                return  this.solicitud.limite_tdc / this.solicitud.num_cred_rev;
               }else{
                 return  0;
               }
@@ -592,7 +623,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </div>
                                               <div class="form-group col-md-4">
                                                 <label>N&uacute;mero de cr&eacute;ditos revolventes activos: </label>
-                                                <input class="form-control" type="number" min="1"  id="num_cred_rev" name="num_cred_rev" v-model="solicitud.num_cred_rev"/>
+                                                <input class="form-control" type="number" min="0"  id="num_cred_rev" name="num_cred_rev" v-model="solicitud.num_cred_rev"/>
                                               </div>
                                         </div>
                                         <!--<div class="form-row">
@@ -727,13 +758,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                            <div class="form-group col-md-6">
                                               <div class="form-group col-md-12">
                                               <label>Decreto TDC venta cruzada:</label>
-                                              <input type="text" id="decreto_tdc" name="decreto_tdc" class="form-control" v-model="decreto" >
+                                              <input type="text" id="decreto_tdc" name="decreto_tdc" class="form-control" v-model="decreto" readonly >
                                             </div>
                                            </div>  
                                            <div class="form-group col-md-6">
                                             <div class="form-group col-md-12">
                                               <label>L&iacute;nea asignada:</label>
-                                              <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" v-model="linea_asignada">
+                                              <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" v-model="linea_asignada" readonly>
                                             </div>
                                            </div>
                                           </div>
