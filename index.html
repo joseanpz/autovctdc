@@ -306,14 +306,15 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         solicitudes: [],
         nueva_solicitud: {
           id: null,
-          nom_solicitante: null,
-          num_cliente: null,
+         // nom_solicitante: null,
+          //num_cliente: null,
+          decision_final:null,
           fecha_nac: null,
-          nom_ejecutivo: null,
-          sucursal: null,
-          facultado: null,
+          //nom_ejecutivo: null,
+          //sucursal: null,
+          //facultado: null,
           fecha_solicitud: null,
-          producto_ori: null,
+          //producto_ori: null,
           solicitud_ori: null,
           exp_rev: null,
           num_tar: null,
@@ -323,7 +324,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           score_parametrico: null,
           alerta_rechazo: null,
           bc_score: null,
-          numero_cuentas:null,
           limite_tdc: null,
           email_generador: null
         }
@@ -331,15 +331,14 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       computed: {
         show_form () {
             var  avanza = 0;
+            if(this.nueva_solicitud.tar_banregio === "1" || this.nueva_solicitud.decision_final == "0" || this.nueva_solicitud.num_tar > 6){
+              var  avanza = 0;
             
-            if(this.nueva_solicitud.exp_rev === "1" && this.nueva_solicitud.num_tar < 7  &&  this.nueva_solicitud.tar_banregio === "0"){
-              avanza = 1;
             }else{
-              avanza = 0;
+              avanza = 1;
             }
              console.log(avanza);
           return avanza === 1;
-         
 
         }
       },
@@ -352,7 +351,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
-              self.solicitudes = response.records.sort((rec1, rec2) => rec2.id - rec1.id);
+              self.solicitudes = response.records;
             })
             .withFailureHandler(function(err){
               console.log(err);
@@ -370,11 +369,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               console.log(err);
             })
             .insert(this.nueva_solicitud);
-        },
-        edit: function(id) {
-          var self = this;
-          console.log('editing');
-          this.nueva_solicitud = this.solicitudes.find(row => row.id == id);
         },
         crea_doc: function(){
           var self = this;
@@ -404,7 +398,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   
   
 </head>
-<body  >
+<body>
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
       <a class="navbar-brand mr-1" href="index.html">Start Auto</a>
@@ -433,7 +427,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-table"></i>
-              Solicitudes Auto</div>
+              Venta Cruzada Tarjeta de Cr&eacute;dito - F&aacute;brica Automotriz  </div>
             <div class="card-body" id="solicitud-app">
               <div class="table-responsive">
                 <a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">+ Solicitud</a> <br/>
@@ -445,122 +439,153 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                            
                               <div class ="row" id="form-app">
                                   <div class = "col-sm-12">
-                                        <div class=""><h5>Criterios minimos de elegibilidad</h5></div>
-                                         
                                         <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                              <label> Experiencia revolvente: {{nueva_solicitud.exp_rev}} </label>
-                                              <select id="exp_rev" name="exp_rev" class="form-control" v-model="nueva_solicitud.exp_rev">
-                                                  <option value="3">--- seleccione--- </option>
-                                                  <option value="1">Si</option>
-                                                  <option value="0">No</option>
-                                              </select>
+                                            <div class="form-group col-md-3">
+                                              <label> Fecha de la evaluaci&oacute;n: </label>
+                                              <input type="date" class="form-control" value="" readonly="" v-model="nueva_solicitud.fecha_solicitud" >
                                             </div>
-                                              
+                                            <div class="form-group col-md-6"></div>
+                                            <div class="form-group col-md-3">
+                                               <label> N&uacute;mero de solicitud auto: </label>
+                                               <input class="form-control" maxlength="8" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="nueva_solicitud.solicitud_ori"/>
+                                             </div>   
+                                         </div>
+                                        
+                                         
+
+                                        <div class="form-row">
+                                          <div class="form-group col-md-12"><h5>Criterios m&iacute;nimos de elegibilidad</h5></div>
+
                                               <div class="form-group col-md-4">
-                                                <label>N&uacute;mero de tarjetas bancarias: </label>
-                                                <input class="form-control" type="number" min="1" id="num_tar" name="num_tar" v-model="nueva_solicitud.num_tar"/>
-                                              </div>
-                                            <div class="form-group col-md-4">
                                               <label>Cuenta con tarjeta Banregio: </label>
                                               <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="nueva_solicitud.tar_banregio">
-                                                <option value="3">--- seleccione--- </option>
+                                                <option value="3" selected="">--- seleccione--- </option>
                                                 <option value="1">Si</option>
                                                 <option value="0">No</option>
                                               </select>
-                                            </div>                                 
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Decisi&oacute;n final cr&eacute;dito automotriz: </label>
+                                                <select id="decision_final" name="decision_final" class="form-control" v-model="nueva_solicitud.decision_final" >
+                                                <option value="3" selected="">--- seleccione--- </option>
+                                                <option value="1">Autorizado</option>
+                                                <option value="0">Rechazado</option>
+                                              </select>
+                                              </div>
+                                              <div class="form-group col-md-4">
+                                                <label>N&uacute;mero de cr&eacute;ditos revolventes activos: </label>
+                                                <input class="form-control" type="number" min="1"  id="num_tar" name="num_tar" v-model="nueva_solicitud.num_tar"/>
+                                              </div>
                                         </div>
+                                        <div class="form-row">
+                                          <input type="button" name="" value="Avanzar" v-on:click='show_form' class="btn btn-success">
+
+                                        </div>
+
                                         <hr style="border: 2px solid gray;"/>
                                         <div v-if="show_form">
                                           <div class="form-row">
-                                            <div class="form-group col-md-2">
-                                                <label>Fecha solicitud:</label>
-                                                <input type="text" class="form-control" value="" readonly v-model="nueva_solicitud.fecha_solicitud" >
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                              <label>Sucursal:</label>
-                                              <input class="form-control" type="text"  id="sucursal" name="sucursal" v-model="nueva_solicitud.sucursal"/>
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                              <label>Ejecutivo:</label>
-                                              <input class="form-control" type="text"  id="nom_ejecutivo" name="nom_ejecutivo" v-model="nueva_solicitud.nom_ejecutivo"/>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                              <label>Solicitud:</label>
-                                              <input class="form-control" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="nueva_solicitud.solicitud_ori"/>
-                                            </div>                                            
-                                          </div>
-
-                                          <div class="form-row">
-                                            <div class="form-group col-md-3">
-                                              <label>N&uacute;mero cliente: </label>
-                                              <input class="form-control" type="text"  id="num_cliente" name="num_cliente" v-model="nueva_solicitud.num_cliente"/>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                            <label>Solicitante: </label>
-                                              <input class="form-control" type="text"  id="nom_solicitante" name="nom_solicitante" v-model="nueva_solicitud.nom_solicitante"/>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                            <label>Fecha nacimiento: </label>
-                                              <input class="form-control" type="date"  id="fecha_nac" name="fecha_nac" v-model="nueva_solicitud.fecha_nac"/>
-                                            </div>                                            
-                                          </div>
-                                          <hr/>
-
-                                          <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                              <label >Ingreso neto:</label>
-                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="nueva_solicitud.ingreso_neto">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                              <label >Capacidad de pago:</label>
-                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="nueva_solicitud.capacidad_pago">               
-                                            </div>                                            
-                                          </div>
-
-                                          <div class="form-row">
+                                            <div class="form-group col-md-12"><h5>Perfil de riesgo</h5></div>
                                           <div class="form-group col-md-4">
+                                              <label>Scoring modelo parametrico:</label>
+                                              <input type="number" maxlength="4" id="score_parametrico" name="score_parametrico" class="form-control" v-model="nueva_solicitud.score_parametrico">
+                                            </div>
+                                            <div class="form-group col-md-4"></div>
+                                            <div class="form-group col-md-4">
                                               <label> BC Score:</label>
-                                              <input type="number" id="bc_score" name="bc_score" class="form-control" v-model="nueva_solicitud.bc_score">
+                                              <input type="text" maxlength="4" id="bc_score" name="bc_score" class="form-control" v-model="nueva_solicitud.bc_score">
                                             </div>
-                                            <div class="form-group col-md-4">
-                                              <label>Score parametico:</label>
-                                              <input type="number" id="score_parametrico" name="score_parametrico" class="form-control" v-model="nueva_solicitud.score_parametrico">
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                              <label>Variables de A/R:</label>
-                                                  <select id="alerta_rechazo" name="alerta_rechazo" class="form-control" v-model="nueva_solicitud.alerta_rechazo">
-                                                      <option value="3">--- seleccione--- </option>
-                                                      <option value="1">Si</option>
-                                                      <option value="0">No</option>
-                                                  </select>
+                                            
+                                                                                        
+                                          </div>
+                                          <hr style="border: 1px solid green;"/>
+                                          <div  id="con_experiencia" class="form-row">
+                                            <div class="form-group col-md-12"><h5>Grupo con Experiencia Revolvente</h5></div>
+                                             <div class="form-group col-md-4">
+                                              <label>L&iacute;mite de cr&eacute;dito de cuentas revolventes activas:</label>
+                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="nueva_solicitud.limite_tdc">
                                             </div>
                                             
                                           </div>
-                                          
-                                          <div class="form-row">
-                                            <div class="form-group col-md-3">
-                                              <label> Producto origen:</label>
-                                              <select id="producto_ori" name="producto_ori" class="form-control" v-model="nueva_solicitud.producto_ori">
-                                                  <option value="1" selected="">Auto PF</option>
+
+                                          <hr style="border: 1px solid green;"/>
+                                          <div  id="sin_experiencia" class="form-row">
+                                            <div class="form-group col-md-12"><h5>Grupo sin Experiencia Revolvente</h5></div>
+                                             <div class="form-group col-md-4">
+                                              <label>Capacidad de pago final:</label>
+                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="nueva_solicitud.capacidad_pago">               
+                                            </div>
+                                            <div class="form-group col-md-4"></div>
+                                             <div class="form-group col-md-4">
+                                              <label>Ingreso neto disponible:</label>
+                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="nueva_solicitud.ingreso_neto">
+                                            </div> 
+                                            
+                                          </div>
+                                          <hr style="border: 1px solid green;"/>
+                                          <div  id="sin_experiencia" class="form-row">
+                                            <div class="form-group col-md-12"><h5>Grupo sin Experiencia de cr&eacute;dito</h5></div>
+                                             <div class="form-group col-md-4">
+                                              <label>Capacidad de pago final:</label>
+                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="nueva_solicitud.capacidad_pago">               
+                                            </div>
+                                             <div class="form-group col-md-4">
+                                              <label>Ingreso neto disponible:</label>
+                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="nueva_solicitud.ingreso_neto">
+                                            </div> 
+                                            <div class="form-group col-md-4">
+                                              <label>Fecha nacimiento del solicitante:</label>
+                                              <input type="date" id="fecha_nac" name="fecha_nac" class="form-control" >
+                                            </div>
+                                            
+                                          </div>
+                                          <hr style="border: 1px solid green;"/>
+                                          <div  id="" class="form-row">
+                                            <div class="form-group col-md-12"><h5>Variables Alerta/Rechazo</h5> </div>
+                                            <div class="form-group col-md-6">
+                                               
+
+                                              <div class="form-group col-md-12">
+                                              <label>Presenta variable de alerta diferente a capacidad de pago insuficiente:</label>
+                                              <select id="var_alerta" class="form-control">
+                                                  <option value="3">-- Seleccione---</option>
+                                                  <option value="1">Si</option>  
+                                                  <option value="0">No</option>  
                                               </select>
                                             </div>
-                                            <div class="form-group col-md-2">
-                                              <label>Numero cuentas:</label>
-                                              <input type="number" id="numero_cuentas" name="numero_cuentas" class="form-control" v-model="nueva_solicitud.numero_cuentas">
+                                            
+                                              
+                                           
                                             </div>
-                                            <div class="form-group col-md-3">
-                                              <label>Limite de credito:</label>
-                                              <input type="number" id="limite_tdc" name="limite_tdc" class="form-control" v-model="nueva_solicitud.limite_tdc">
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                              <label>Facultado que autoriza:</label>
-                                              <input type="text" id="facultado" name="facultado" class="form-control" v-model="nueva_solicitud.facultado">
-                                            </div>                                             
-                                          </div>
 
-                                          <div class="col-sm-12">
-                                            <input type="" class="btn btn-success" style="float:right;" name="importSubmit" value="Guardar" v-on:click='insert'/>
+                                            <div class="form-group col-md-6">
+                                              <div class="form-group col-md-12">
+                                              <label>Presenta variable de rechazo diferente a capacidad de pago nula:<br/><br/></label>
+                                              
+                                              <select id="var_rechazo" class="form-control">
+                                                  <option value="3">-- Seleccione---</option>
+                                                  <option value="1">Si</option>  
+                                                  <option value="0">No</option>  
+                                              </select>
+                                            </div>
+                                            </div>
+                                              
+                                          </div>
+                                          <hr style="border: 1px solid green;"/>
+                                          <div  id="" class="form-row">
+                                              <div class="form-group col-md-12"><h5>Resultado de evaluaci&oacute;n:</h5></div>
+                                           <div class="form-group col-md-6">
+                                              <div class="form-group col-md-12">
+                                              <label>Decreto TDC venta cruzada:</label>
+                                              <input type="text" id="decreto_tdc" name="decreto_tdc" class="form-control" >
+                                            </div>
+                                           </div>  
+                                           <div class="form-group col-md-6">
+                                            <div class="form-group col-md-12">
+                                              <label>L&iacute;nea asignada:</label>
+                                              <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" >
+                                            </div>
+                                           </div>
                                           </div>
 
                                         </div>
@@ -589,13 +614,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                     <tr v-for="solicitud in solicitudes" >
                       <td>{{solicitud.id}}</td>
-                      <td>{{solicitud.email_geerador}}</td>
+                      <td>{{solicitud.producto_ori}}</td>
                       <td>{{solicitud.nom_solicitante}}</td>
                       <td>{{solicitud.nom_ejecutivo}}</td>
-                      <td>
-                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='edit(solicitud.id)'>Editar</button>
-                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button>
-                      </td>
+                      <td><button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button></td>
                     </tr>
                   
                   </tbody>
