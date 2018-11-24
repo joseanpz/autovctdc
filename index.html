@@ -503,7 +503,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
-              self.solicitudes = response.records;
+              self.solicitudes = response.records.sort((rec1, rec2) => rec2.id - rec1.id);;
             })
             .withFailureHandler(function(err){
               console.log(err);
