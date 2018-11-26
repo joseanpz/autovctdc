@@ -65,7 +65,7 @@ function insert(data) {
           data.id,
          // nom_solicitante: null,
           //num_cliente: null,
-          data.decision_final,
+          "'" + data.decision_final,
           data.fecha_nac,
           //nom_ejecutivo: null,
           //sucursal: null,
@@ -76,13 +76,13 @@ function insert(data) {
           data.decreto,
           data.linea_asignada,
           // data.exp_rev,
-          data.num_cred_rev,
-          data.tar_banregio, 
+          "'" + data.num_cred_rev,
+          "'" + data.tar_banregio, 
           data.ingreso_neto,
           data.capacidad_pago,
           data.score_parametrico,
-          data.alerta,
-          data.rechazo,
+          "'" + data.alerta,
+          "'" + data.rechazo,
           data.bc_score,
           data.limite_tdc,
           data.email_generador
@@ -93,7 +93,9 @@ function insert(data) {
    }
 
   if (data.fecha_solicitud === null){
-    data.fecha_solicitud = Date.now();
+
+    var now_date = new Date(Date.now());
+    data.fecha_solicitud = now_date.getFullYear() +"-"+(now_date.getMonth()+1)+"-"+now_date.getDate();
   }
 
 
@@ -148,7 +150,7 @@ function insert(data) {
         data.id,
        // nom_solicitante: null,
         //num_cliente: null,
-        data.decision_final,
+        "'" + data.decision_final,
         data.fecha_nac,
         //nom_ejecutivo: null,
         //sucursal: null,
@@ -159,13 +161,13 @@ function insert(data) {
         data.decreto,
         data.linea_asignada,
         // data.exp_rev,
-        data.num_cred_rev,
-        data.tar_banregio, 
+        "'" + data.num_cred_rev,
+        "'" + data.tar_banregio, 
         data.ingreso_neto,
         data.capacidad_pago,
         data.score_parametrico,
-        data.alerta,
-        data.rechazo,
+        "'" + data.alerta,
+        "'" + data.rechazo,
         data.bc_score,
         data.limite_tdc,
         data.email_generador
