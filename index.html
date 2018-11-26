@@ -346,8 +346,23 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             }
         },
 
-        avanza () {
-           ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
+        numeroSolicitudCap () {
+
+          ret = (this.solicitud.solicitud_ori === null)? false : (this.solicitud.solicitud_ori.length != 8)? false: true ;
+          
+          console.log(ret);
+
+          return ret;
+          
+        },
+
+        avanza () {          
+          
+          
+          ret = (
+            this.numeroSolicitudCap && this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" 
+            && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0
+          );
            return ret;
         },
 
@@ -472,19 +487,27 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         
         this.debounceInsert = _.debounce(this.insert, 500);
 
+        this.debounceUpdate = _.debounce(this.update, 500);
+
         this.read();
       },
       watch: {
-        avanza: function(newavanza, oldavanza) {
-          if (newavanza){
+
+        numeroSolicitudCap: function(newsolcap, oldsolcap) {
+          if (newsolcap) {
             this.debounceInsert();
           }
         },
+        avanza: function(newavanza, oldavanza) {
+          if (newavanza){
+            this.debounceUpdate();
+          }
+        },
         linea_asignada: function(newlineaasignada, oldlineaasignada) {
-          this.debounceInsert()
+          this.debounceUpdate();
         },
         decreto: function(newdecreto, olddecreto) {
-          this.debounceInsert()
+          this.debounceUpdate();
         },
       },
 
@@ -506,10 +529,28 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           var self = this;
           this.solicitud.decreto = this.decreto;
           this.solicitud.linea_asignada = this.linea_asignada;
+          console.log(this.solicitud);
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
               self.solicitud = response.data;
+              self.read();           
+            })
+            .withFailureHandler(function(err){
+              console.log(err);
+            })
+            .insert(this.solicitud);
+        },
+
+        update: function() {
+          var self = this;
+          this.solicitud.decreto = this.decreto;
+          this.solicitud.linea_asignada = this.linea_asignada;
+          console.log(this.solicitud);
+          google.script.run
+            .withSuccessHandler(function(response){
+              console.log(response);
+              //self.solicitud = response.data;
               self.read();           
             })
             .withFailureHandler(function(err){

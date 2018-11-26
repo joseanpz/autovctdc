@@ -36,6 +36,8 @@ function insert(data) {
       if (idTemp == data.id) {
          flag = 0;
         
+        
+               
         sheetSolicitudes.getRange(i, 1, 1, sheetSolicitudes.getLastColumn()).setValues([[
           /*data.id,
           data.nom_solicitante,
@@ -70,7 +72,7 @@ function insert(data) {
           //facultado: null,
           data.fecha_solicitud,
           //producto_ori: null,
-          data.solicitud_ori,
+          "'" + data.solicitud_ori,
           data.decreto,
           data.linea_asignada,
           // data.exp_rev,
@@ -110,6 +112,11 @@ function insert(data) {
       var auto_inc_id = parseInt(auto_inc.value);
       sheetConfigs.getRange(2,2,1,1).setValue(auto_inc_id+1);
       data.id = auto_inc_id;
+     
+     Logger.log(data);
+
+      // solicitud_ori field format (keep leading zeros)
+      // sheetSolicitudes.getRange(sheetSolicitudes.getLastRow()+1, 5).setNumberFormat("@");
 
 
       var rowData = sheetSolicitudes.appendRow([
@@ -148,7 +155,7 @@ function insert(data) {
         //facultado: null,
         data.fecha_solicitud,
         //producto_ori: null,
-        data.solicitud_ori,
+        "'" + data.solicitud_ori,
         data.decreto,
         data.linea_asignada,
         // data.exp_rev,
