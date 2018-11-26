@@ -763,9 +763,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             
                                           </div> -->
 
-                                          <div v-else>
-                                            No se ha estimado la experiencia revolvente                                         
-                                          </div> 
+                                         
 
                                           <div v-if="linea_asignada != null">
                                             <hr style="border: 1px solid #fb6830;"/>
@@ -835,8 +833,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                 <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0" >
                   <thead>
                     <tr>
-                      <th>Id</th>
-                      <th>Número de solicitud Auto</th>
+                      <th>Fecha de registro</th>
+                      <th>Último usuario que editó</th>
                       <th>Decreto</th>
                       <th>Línea asignada</th>
                       <th></th>
@@ -845,7 +843,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                   <tbody>
 
                     <tr v-for="solicitud in solicitudes" >
-                      <td>{{solicitud.id}}</td>
+                      <td>{{solicitud.fecha_solicitud}}</td>
+                      <td>{{solicitud.email_generador}}</td>
                       <td>{{solicitud.solicitud_ori}}</td>
                       <td>{{solicitud.decreto}}</td>
                       <td>{{solicitud.linea_asignada}}</td>
