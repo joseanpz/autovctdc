@@ -66,7 +66,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 }
 
 .scroll-to-top:hover {
-  background: #343a40;
+  background: white;
 }
 
 .scroll-to-top i {
@@ -593,20 +593,21 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   
 </head>
 <body>
-  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+  <nav class="navbar navbar-expand static-top" style="background: #fb6830;">
 
-      <a class="navbar-brand mr-1" href="index.html">Start Auto</a>
+      <div class="col-sm-10" style="color:white; font-size: 20px">Evaluaci&oacute;n venta cruzada TDC - AUTO</div>
+      <div class="col-sm-2"><img  src="https://portalbanregio.s3.amazonaws.com/assets/naranja/img/logo-sm.png"></div>
 
     </nav>
 
     <div id="wrapper">
 
       <!-- Sidebar -->
-      <ul class="sidebar navbar-nav">
+      <ul class="sidebar navbar-nav" style="background: #3a5fab;">
         <li class="nav-item active">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="#">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+            <span>Inicio</span>
           </a>
         </li>
         
@@ -624,7 +625,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               Venta Cruzada Tarjeta de Cr&eacute;dito - F&aacute;brica Automotriz  </div>
             <div class="card-body" id="solicitud-app">
               <div class="table-responsive">
-                <a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">+ Solicitud</a> <br/>
+                <a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">Crear Nueva Solicitud</a> <br/>
                 <hr style="border: 2px solid gray;">
                 <br/>
                 <div class="panel-heading" style="border:1px solid #dfe1e5; padding: 15px;" id="importFrm">
@@ -676,7 +677,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                                         </div>-->
 
-                                        <hr style="border: 2px solid gray;"/>
+                                        <hr style="border: 1px solid #fb6830;"/>
                                         <div v-if="avanza">
                                           <div class="form-row">
                                             <div class="form-group col-md-12"><h5>Perfil de riesgo</h5></div>
@@ -693,7 +694,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                                                         
                                           </div>
                                           <div v-if="exp_rev === 0">
-                                            <hr style="border: 1px solid green;"/>
+                                            <hr style="border: 1px solid #fb6830;"/>
                                             <div  id="con_experiencia" class="form-row">
                                               <div class="form-group col-md-12"><h5>Grupo con Experiencia Revolvente</h5></div>
                                                <div class="form-group col-md-4">
@@ -703,7 +704,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                           </div>
                                           <div v-else-if="exp_rev == 1">
-                                            <hr style="border: 1px solid green;"/>
+                                            <hr style="border: 1px solid #fb6830;"/>
                                             <div  id="sin_experiencia" class="form-row">
                                               <div class="form-group col-md-12"><h5>Grupo sin Experiencia Revolvente</h5></div>
                                                <div class="form-group col-md-4">
@@ -720,7 +721,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           </div>
                                           
                                           <div v-if="exp_rev == 2">
-                                            <hr style="border: 1px solid green;"/>
+                                            <hr style="border: 1px solid #fb6830;"/>
                                             <div  id="sin_experiencia" class="form-row">
                                               <div class="form-group col-md-12"><h5>Grupo sin Experiencia de cr&eacute;dito</h5></div>
                                                <div class="form-group col-md-4">
@@ -739,7 +740,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             
                                           </div> 
                                           <!-- 
-                                          <hr style="border: 1px solid green;"/>
+                                          <hr style="border: 1px solid #fb6830;"/>
                                           <div  id="sin_experiencia" class="form-row">
                                             <div class="form-group col-md-12"><h5>Grupo sin Experiencia de cr&eacute;dito</h5></div>
                                              <div class="form-group col-md-4">
@@ -762,7 +763,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           </div> 
 
                                           <div v-if="linea_asignada != null">
-                                            <hr style="border: 1px solid green;"/>
+                                            <hr style="border: 1px solid #fb6830;"/>
                                             <div  id="" class="form-row">
                                               <div class="form-group col-md-12"><h5>Variables Alerta/Rechazo</h5> </div>
                                               <div class="form-group col-md-6">
@@ -797,7 +798,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                           </div>
 
 
-                                          <hr style="border: 1px solid green;"/>
+                                          <hr style="border: 1px solid #fb6830;"/>
                                           <div  id="" class="form-row">
                                               <div class="form-group col-md-12"><h5>Resultado de evaluaci&oacute;n:</h5></div>
                                            <div class="form-group col-md-6">
@@ -808,7 +809,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                            </div>  
                                            <div class="form-group col-md-6">
                                             <div class="form-group col-md-12">
-                                              <label>L&iacute;nea asignada:</label>
+                                              <label>L&iacute;nea asignada: {{factorVecesCap}} - {{topeMaximoEdad}}</label>
                                               <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" v-model="linea_asignada" readonly>
                                             </div>
                                            </div>
@@ -826,7 +827,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                 </div>
              
                 
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0" >
                   <thead>
                     <tr>
                       <th>Id</th>
@@ -845,8 +846,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                       <td>{{solicitud.linea_asignada}}</td>
 
                       <td>
-                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='edit(solicitud.id)'>Editar</button>
-                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc'>File</button>
+                        <button type="button" class="btn btn-sm btn-success" v-on:click='edit(solicitud.id)' style="color: white; background: #fb6830;border-radius: 25px;border: 1px solid; padding: 11px 20px;">Editar</button>
+                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc' style="color: white;border-radius: 25px;border: 1px solid; padding: 11px 20px">Borrar</button>
                       </td>
                     </tr>
                   
@@ -854,7 +855,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                 </table>
               </div>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            
           </div>
 
         </div>
