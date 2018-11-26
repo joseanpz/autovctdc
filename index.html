@@ -346,20 +346,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             }
         },
 
-        fechaSolicitud () {
-    
-          if (this.solicitud.fecha_solicitud === null) {
-            return null;
-          }else {
-            var date = new Date(this.solicitud.fecha_solicitud);
-            var fechan = date.getFullYear() +"-"+(date.getMonth()+1)+"-"+date.getDate();
-            console.log(fechan);
-
-            return fechan;
-          }
-           
-        },
-
         numeroSolicitudCap () {
 
           ret = (this.solicitud.solicitud_ori === null)? false : (this.solicitud.solicitud_ori.length != 8)? false: true ;
@@ -624,6 +610,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           <a class="nav-link" href="#">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Inicio</span>
+            <span><?= user_email ?></span>
           </a>
         </li>
         
@@ -652,7 +639,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                   <div class = "col-sm-12">
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
-                                              <label> Fecha de la evaluaci&oacute;n: {{solicitud.fecha_solicitud}} </label>
+                                              <label> Fecha de la evaluaci&oacute;n:</label>
                                               <input type="date" class="form-control" value="" readonly="" v-model="solicitud.fecha_solicitud" >
                                             </div>
                                             <div class="form-group col-md-6"></div>
@@ -825,7 +812,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                            </div>  
                                            <div class="form-group col-md-6">
                                             <div class="form-group col-md-12">
-                                              <label>L&iacute;nea asignada: {{factorVecesCap}} - {{topeMaximoEdad}}</label>
+                                              <label>L&iacute;nea asignada:</label>
                                               <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" v-model="linea_asignada" readonly>
                                             </div>
                                            </div>

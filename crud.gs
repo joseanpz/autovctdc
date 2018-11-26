@@ -23,7 +23,19 @@ function insert(data) {
    // all data your needed
   
   var sheetSolicitudes = db.getSheetByName("solicitudes");
-  
+ 
+
+   if (data.fecha_solicitud === null){
+
+    var now_date = new Date(Date.now());
+    data.fecha_solicitud = now_date.getFullYear() +"-"+(now_date.getMonth()+1)+"-"+now_date.getDate();
+  }
+
+  //if (data.email_generador === null) {
+    data.email_generador = user.getEmail();
+  //} 
+
+  //data.email_generador = user.getEmail();
 
    var flag = 1;
    var Row = sheetSolicitudes.getLastRow();
@@ -92,11 +104,7 @@ function insert(data) {
       }
    }
 
-  if (data.fecha_solicitud === null){
 
-    var now_date = new Date(Date.now());
-    data.fecha_solicitud = now_date.getFullYear() +"-"+(now_date.getMonth()+1)+"-"+now_date.getDate();
-  }
 
 
    

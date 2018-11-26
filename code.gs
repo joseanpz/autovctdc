@@ -13,7 +13,9 @@ function doGet(req) {
   
   //TODO: Validations 
   if(user.is_authorized()) {
-    return HtmlService.createHtmlOutputFromFile('index');
+    var template = HtmlService.createTemplateFromFile('index');
+    template.user_email = user.getEmail(); 
+    return template.evaluate();
   }
   else {
     return HtmlService.createHtmlOutputFromFile('noacceso');
