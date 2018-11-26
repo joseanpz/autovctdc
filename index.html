@@ -296,6 +296,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script>
 
@@ -331,11 +332,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       },
       computed: {
         exp_rev () {
-
-           console.log("in exp rev");
-           console.log(this.solicitud.num_cred_rev);
-           console.log(this.solicitud.bc_score);
-           //console.log(this.solicitud.num_cred_rev);
            
             if (this.solicitud.num_cred_rev == null || this.solicitud.bc_score == null || !this.avanza) {return null;}
 
@@ -352,18 +348,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         avanza () {
            ret = (this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0);
-           console.log(this.solicitud.tar_banregio);
-           console.log(this.solicitud.decision_final);
-           console.log(this.solicitud.num_cred_rev);
-           console.log(ret);
            return ret;
         },
 
-        alerta_rechazo () {
-          console.log("alerta rechazo");
-          console.log(this.solicitud.alerta);
-          console.log(this.solicitud.rechazo);
-          
+        alerta_rechazo () {   
 
           return (this.solicitud.alerta != null && this.solicitud.rechazo != null) ? (this.solicitud.alerta == "1" || this.solicitud.rechazo == "1") : null;
         },
@@ -398,9 +386,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         },
 
-        decreto (){
-         
+        decreto (){         
           if (this.linea_asignada == null || this.alerta_rechazo == null){return null;}
+          
           if(this.solicitud.score_parametrico <= "644" || (this.alerta_rechazo && this.solicitud.score_parametrico <= "739")){
             return  "Revisión Facultado TDC";
           }else if(this.solicitud.score_parametrico <= "739" || this.alerta_rechazo ){
@@ -418,8 +406,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                     return  10;
                   }else{
                     return  0.17914852 * 0.093467212 * Math.exp(0.006534714 * this.solicitud.score_parametrico) +  1.68306653;
-                  }
-                
+                  }                
               }else{
                 return  0;
               }
@@ -482,19 +469,22 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       },
 
       created: function () {
-        this.read()
+        
+        this.debounceInsert = _.debounce(this.insert, 500);
+
+        this.read();
       },
       watch: {
         avanza: function(newavanza, oldavanza) {
           if (newavanza){
-            this.insert();
+            this.debounceInsert();
           }
         },
         linea_asignada: function(newlineaasignada, oldlineaasignada) {
-          this.insert()
+          this.debounceInsert()
         },
         decreto: function(newdecreto, olddecreto) {
-          this.insert()
+          this.debounceInsert()
         },
       },
 
@@ -504,7 +494,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
-              self.solicitudes = response.records.sort((rec1, rec2) => rec2.id - rec1.id);;
+              self.solicitudes = response.records.sort((rec1, rec2) => rec2.id - rec1.id);
             })
             .withFailureHandler(function(err){
               console.log(err);
