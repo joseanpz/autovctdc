@@ -307,17 +307,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         solicitudes: [],
         solicitud: {
           id: null,
-         // nom_solicitante: null,
-          //num_cliente: null,
           decision_final:null,
           fecha_nac: null,
-          //nom_ejecutivo: null,
-          //sucursal: null,
-          //facultado: null,
           fecha_solicitud: null,
-          //producto_ori: null,
           solicitud_ori: null,
-          // exp_rev: null,
           num_cred_rev: null,
           tar_banregio: null, 
           ingreso_neto: null,
@@ -557,6 +550,21 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               console.log(err);
             })
             .insert(this.solicitud);
+        },
+
+        deleteSol: function(id) {
+          var self = this;
+          console.log(id);
+          google.script.run
+            .withSuccessHandler(function(response){
+              console.log(response);
+              //self.solicitud = response.data;
+              self.read();           
+            })
+            .withFailureHandler(function(err){
+              console.log(err);
+            })
+            .deleteSol(id);
         },
 
         edit: function(id) {
@@ -851,7 +859,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                       <td>
                         <button type="button" class="btn btn-sm btn-success" v-on:click='edit(solicitud.id)' style="color: white; background: #fb6830;border-radius: 25px;border: 1px solid; padding: 11px 20px;">Editar</button>
-                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='crea_doc' style="color: white;border-radius: 25px;border: 1px solid; padding: 11px 20px">Borrar</button>
+                        <button type="button" class="btn btn-sm btn-secondary" v-on:click='deleteSol(solicitud.id)' style="color: white;border-radius: 25px;border: 1px solid; padding: 11px 20px">Borrar</button>
                       </td>
                     </tr>
                   

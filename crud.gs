@@ -51,43 +51,14 @@ function insert(data) {
         
                
         sheetSolicitudes.getRange(i, 1, 1, sheetSolicitudes.getLastColumn()).setValues([[
-          /*data.id,
-          data.nom_solicitante,
-          data.num_cliente,
-          data.fecha_nac,
-          data.nom_ejecutivo,
-          data.sucursal,
-          data.facultado,
-          data.fecha_solicitud,
-          data.producto_ori,
-          data.solicitud_ori,
-          data.exp_rev,
-          data.num_tar,
-          data.tar_banregio,
-          data.ingreso_neto,
-          data.capacidad_pago,
-          data.score_parametrico,
-          data.alerta_rechazo,
-          data.bc_score,
-          data.numero_cuentas,
-          data.limite_tdc,
-          data.email_generador*/
-          //user.getEnail()
 
           data.id,
-         // nom_solicitante: null,
-          //num_cliente: null,
           "'" + data.decision_final,
           data.fecha_nac,
-          //nom_ejecutivo: null,
-          //sucursal: null,
-          //facultado: null,
           data.fecha_solicitud,
-          //producto_ori: null,
           "'" + data.solicitud_ori,
           data.decreto,
           data.linea_asignada,
-          // data.exp_rev,
           "'" + data.num_cred_rev,
           "'" + data.tar_banregio, 
           data.ingreso_neto,
@@ -130,45 +101,13 @@ function insert(data) {
 
 
       var rowData = sheetSolicitudes.appendRow([
-       //auto_inc_id,
-       /*data.nom_solicitante,
-       data.num_cliente,
-       data.fecha_nac,
-       data.nom_ejecutivo,
-       data.sucursal,
-       data.facultado,
-       data.fecha_solicitud,
-       data.producto_ori,
-       data.solicitud_ori,
-       data.exp_rev,
-       data.num_tar,
-       data.tar_banregio,
-       data.ingreso_neto,
-       data.capacidad_pago,
-       data.score_parametrico,
-       data.alerta_rechazo,
-       data.bc_score,
-       data.numero_cuentas,
-       data.limite_tdc,
-       data.email_generador*/
-       //user.getEnail()
-
-     // nom_solicitante: null,
-      //num_cliente: null,
         data.id,
-       // nom_solicitante: null,
-        //num_cliente: null,
         "'" + data.decision_final,
         data.fecha_nac,
-        //nom_ejecutivo: null,
-        //sucursal: null,
-        //facultado: null,
         data.fecha_solicitud,
-        //producto_ori: null,
         "'" + data.solicitud_ori,
         data.decreto,
         data.linea_asignada,
-        // data.exp_rev,
         "'" + data.num_cred_rev,
         "'" + data.tar_banregio, 
         data.ingreso_neto,
@@ -194,6 +133,38 @@ function insert(data) {
 
 function checkAutoInc(row) {
     return row.name === 'autoinc_count_sol';
+}
+
+
+function deleteSol(sol_id) {
+  var sheetSolicitudes = db.getSheetByName("solicitudes");
+   //var id = data.id;
+   var flag = 0;
+   var result = 'not found';
+   var status = false;
+
+   //var Row = sheet.getLastRow();
+   //for (var i = 1; i <= Row; i++) {
+   //   var idTemp = sheet.getRange(i, 1).getValue();
+   //   if (idTemp == id) {
+
+   var Row = sheetSolicitudes.getLastRow();
+   for (var i = 1; i <= Row; i++) {
+      var idTemp = sheetSolicitudes.getRange(i, 1).getValue();
+      if (idTemp == sol_id) {
+         flag = 0;
+         sheetSolicitudes.deleteRow(i);
+         
+         var result = "Item succesfully deleted";
+         flag = 1;
+         status = true;
+      }
+
+   }
+   return {
+      message: result,
+      status: status
+   };
 }
 
 
