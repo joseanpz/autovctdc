@@ -47,25 +47,27 @@ function insert(data) {
       var idTemp = sheetSolicitudes.getRange(i, 1).getValue();
       if (idTemp == data.id) {
          flag = 0;
+
+        
         
         
                
         sheetSolicitudes.getRange(i, 1, 1, sheetSolicitudes.getLastColumn()).setValues([[
 
           data.id,
-          "'" + data.decision_final,
+          setStr(data.decision_final),
           data.fecha_nac,
           data.fecha_solicitud,
-          "'" + data.solicitud_ori,
+          setStr(data.solicitud_ori),
           data.decreto,
           data.linea_asignada,
-          "'" + data.num_cred_rev,
-          "'" + data.tar_banregio, 
+          setStr(data.num_cred_rev),
+          setStr(data.tar_banregio), 
           data.ingreso_neto,
           data.capacidad_pago,
           data.score_parametrico,
-          "'" + data.alerta,
-          "'" + data.rechazo,
+          setStr(data.alerta),
+          setStr(data.rechazo),
           data.bc_score,
           data.limite_tdc,
           data.email_generador
@@ -102,19 +104,19 @@ function insert(data) {
 
       var rowData = sheetSolicitudes.appendRow([
         data.id,
-        "'" + data.decision_final,
+        setStr(data.decision_final),
         data.fecha_nac,
         data.fecha_solicitud,
-        "'" + data.solicitud_ori,
+        setStr(data.solicitud_ori),
         data.decreto,
         data.linea_asignada,
-        "'" + data.num_cred_rev,
-        "'" + data.tar_banregio, 
+        setStr(data.num_cred_rev),
+        setStr(data.tar_banregio), 
         data.ingreso_neto,
         data.capacidad_pago,
         data.score_parametrico,
-        "'" + data.alerta,
-        "'" + data.rechazo,
+        setStr(data.alerta),
+        setStr(data.rechazo),
         data.bc_score,
         data.limite_tdc,
         data.email_generador

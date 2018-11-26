@@ -57,3 +57,11 @@ function response(callback) {
       }
    }
 }
+
+function setStr(data) {
+  if (data != null) {
+    return "'" + data;
+  }else {
+    return data;
+  }
+}

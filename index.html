@@ -321,7 +321,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           bc_score: null,
           limite_tdc: null,
           email_generador: null
-        }
+        },
+        open_form_state: false,
+        loading: false
       },
       computed: {
         exp_rev () {
@@ -487,24 +489,72 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       watch: {
 
         numeroSolicitudCap: function(newsolcap, oldsolcap) {
-          if (newsolcap) {
-            this.debounceInsert();
+          if (newsolcap && !this.loading) {
+             console.log('watching numeroSolicitudCap');
+             console.log(newsolcap);
+              this.debounceInsert();  
+            
+            
           }
         },
         avanza: function(newavanza, oldavanza) {
-          if (newavanza){
+          if (newavanza && !this.loading){
+            console.log('watching avanza');
+            console.log(newavanza);
             this.debounceUpdate();
           }
         },
         linea_asignada: function(newlineaasignada, oldlineaasignada) {
-          this.debounceUpdate();
+          if (newlineaasignada != null && !this.loading) {
+            console.log('watching linea_asignada');
+            console.log(newlineaasignada);
+            this.debounceUpdate();  
+          }
+          
         },
         decreto: function(newdecreto, olddecreto) {
-          this.debounceUpdate();
+
+         // if (newdecreto != null && !this.loading) {
+            console.log('watching decreto');
+            console.log(newdecreto);
+            this.debounceUpdate();  
+          //}
         },
       },
 
       methods: {
+        resetForm: function () {
+          
+          this.solicitud.id = null;
+          this.solicitud.decision_final = null;
+          this.solicitud.fecha_nac= null;
+          this.solicitud.fecha_solicitud = null;
+          this.solicitud.solicitud_ori = null;
+          this.solicitud.num_cred_rev = null;
+          this.solicitud.tar_banregio = null; 
+          this.solicitud.ingreso_neto = null;
+          this.solicitud.capacidad_pago = null;
+          this.solicitud.score_parametrico = null;
+          this.solicitud.alerta = null;
+          this.solicitud.rechazo = null;
+          this.solicitud.bc_score = null;
+          this.solicitud.limite_tdc = null;
+          this.solicitud.email_generador = null;
+        
+        },
+
+        toggleResetForm: function () {
+          if (this.open_form_state) {
+            $('#importFrm').slideToggle();
+            this.resetForm();
+            $('#solicitud_ori').prop('readonly', false);
+            $('#importFrm').slideToggle();
+          }else {
+            $('#importFrm').slideToggle();
+            this.open_form_state = true;
+          }
+        },
+
         read: function () {
           var self = this;
           google.script.run
@@ -523,6 +573,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           this.solicitud.decreto = this.decreto;
           this.solicitud.linea_asignada = this.linea_asignada;
           console.log(this.solicitud);
+          $('#solicitud_ori').prop('readonly', true);
           google.script.run
             .withSuccessHandler(function(response){
               console.log(response);
@@ -571,8 +622,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           var self = this;
           console.log('editing');
           var sol = this.solicitudes.find(row => row.id == id);
+
+          this.toggleResetForm();
+          console.log('aftertogggling');
+          
           this.solicitud = sol;
-          this.solicitud.fecha_solicitud = sol.fecha_solicitud;
+          this.loading = false;
+          //this.solicitud.fecha_solicitud = sol.fecha_solicitud;
         },
 
         crea_doc: function(){
@@ -605,7 +661,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 <body>
   <nav class="navbar navbar-expand static-top" style="background: #fb6830;">
 
-      <div class="col-sm-10" style="color:white; font-size: 20px">Evaluaci&oacute;n Venta Cruzada tdcxauto</div>
+      <div class="col-sm-10" style="color:white; font-size: 20px">Evaluaci&oacute;n Venta Cruzada TDCxAUTO</div>
       <div class="col-sm-2"><img  src="https://portalbanregio.s3.amazonaws.com/assets/naranja/img/logo-sm.png">
       <span style="color:white;"><?= user_email ?></span>
     </div>
@@ -638,7 +694,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               Venta Cruzada Tarjeta de Cr&eacute;dito - F&aacute;brica Automotriz  </div>
             <div class="card-body" id="solicitud-app">
               <div class="table-responsive">
-                <a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">Crear Nueva Solicitud</a> <br/>
+                <button type="button" class="btn btn-sm btn-success" v-on:click='toggleResetForm()' style="color: white; background: #fb6830;border-radius: 25px;border: 1px solid; padding: 11px 20px;">Crear Nueva Solicitud</button>
+                <!--<a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">Crear Nueva Solicitud</a>--> 
+                <br/>
                 <hr style="border: 2px solid gray;">
                 <br/>
                 <div class="panel-heading" style="border:1px solid #dfe1e5; padding: 15px;" id="importFrm">
@@ -858,6 +916,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                     <tr>
                       <th>Fecha de registro</th>
                       <th>Último usuario que editó</th>
+                      <th>Solicitud origen</th>
                       <th>Decreto</th>
                       <th>Línea asignada</th>
                       <th></th>
