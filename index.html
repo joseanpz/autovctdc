@@ -334,10 +334,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             if (this.solicitud.num_cred_rev == null || this.solicitud.bc_score == null || !this.avanza) {return null;}
 
             if (this.solicitud.bc_score == -8 || this.solicitud.bc_score == -9) {
-              return 2; // con experiencia revolvente 
+              return 2; // sin experiencia credito 
             }
             else if(  this.solicitud.num_cred_rev > 0  ) {
-              return 0; // sin experiencia de credito
+              return 0; // con experiencia de credito
             }
             else {
               return 1; // sin experiencia revolvente
@@ -371,30 +371,43 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         linea_asignada () {
           if (this.exp_rev == null || this.solicitud.score_parametrico == null || this.solicitud.bc_score == null ) {
+            console.log('linea asignada return  1');
             return null;
           } else {
             if (this.exp_rev == 0) {
-              if (this.solicitud.limite_tdc == null){
+              if (!this.solicitud.limite_tdc){
+                console.log('linea asignada return  2');
                 return null;
               }
               else {
+                // $('#linea_autorizada').prop('readonly', false);
+                console.log('linea asignada return  3');
+                console.log(this.solicitud.limite_tdc);
                 return  Math.round(Math.max(Math.min(this.factPorcentajeProm * this.limitePromedio, 250000),5000)/1000)*1000;
               }
             }
             else if (this.exp_rev == 1) {
               if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null){
+                console.log('linea asignada return  4');
                 return null;
               }else {
+                // $('#linea_autorizada').prop('readonly', false);
+                console.log('linea asignada return  5');
                 return  Math.round(Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoIngreso,250000),5000)/1000)*1000;
               }
             }
             else if (this.exp_rev == 2){
               if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null || this.solicitud.fecha_nac == null){
+                console.log('linea asignada return  6');
                 return null;
               }else {
+                console.log('linea asignada return  7');
                 return   Math.round(Math.max(Math.min(this.factorVecesCap * this.solicitud.capacidad_pago, this.topeMaximoEdad,this.topeMaximoIngreso,250000),5000)/1000)*1000;
               }
-            } else {return null;}
+            } else {
+              console.log('linea asignada return  8');
+              return null;
+            }
           }          
 
         },
@@ -490,6 +503,14 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         this.read();
       },
 
+      mounted: function () {
+        if (!this.linea_asignada) {
+          $('#linea_autorizada').prop('readonly', true);
+        } else {
+          $('#linea_autorizada').prop('readonly', false); 
+        }
+      },
+
       watch: {
 
         numeroSolicitudCap: function(newsolcap, oldsolcap) {
@@ -509,14 +530,26 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           }
         },
         linea_asignada: function(newlineaasignada, oldlineaasignada) {
-          if (newlineaasignada != null && !this.loading) {
-            console.log('watching linea_asignada');
-            console.log(newlineaasignada);
-            this.debounceUpdate();  
+          console.log('watching linea_asignada');
+          console.log(newlineaasignada);
+          if (!newlineaasignada ) {
+            $('#linea_autorizada').prop('readonly', true);             
+          }else {
+            $('#linea_autorizada').prop('readonly', false);
           }
+
+          this.debounceUpdate(); 
           
         },
         decreto: function(newdecreto, olddecreto) {
+
+         // if (newdecreto != null && !this.loading) {
+            console.log('watching decreto');
+            console.log(newdecreto);
+            this.debounceUpdate();  
+          //}
+        },
+         linea_autorizada: function(newdecreto, olddecreto) {
 
          // if (newdecreto != null && !this.loading) {
             console.log('watching decreto');
@@ -534,8 +567,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           this.solicitud.fecha_nac= null;
           this.solicitud.fecha_solicitud = null;
           this.solicitud.solicitud_ori = null;
+          this.solicitud.plaza = null;
+          this.solicitud.origen = null;
+          this.solicitud.linea_autorizada = null;
           this.solicitud.num_cred_rev = null;
-          this.solicitud.tar_banregio = null; 
+          this.solicitud.tar_banregio = null;
           this.solicitud.ingreso_neto = null;
           this.solicitud.capacidad_pago = null;
           this.solicitud.score_parametrico = null;
@@ -727,11 +763,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </select>
                                             </div>
                                             <div class="form-group col-md-3">
-                                              <label>Solicitud originada: </label>
+                                              <label>Origen: </label>
                                               <select id="origen" name="origen" class="form-control" v-model="solicitud.origen">
                                                 <option value="null" selected="">--- seleccione--- </option>
-                                                <option value="1">Sucursal</option>
-                                                <option value="0">UEN - Arrendamiento</option>
+                                                <option value="SUC">Sucursal</option>
+                                                <option value="UEN-ARR">UEN - Arrendamiento</option>
                                               </select>
                                             </div>
                                               
@@ -825,7 +861,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               </div> 
                                               <div class="form-group col-md-4">
                                                 <label>Fecha nacimiento del solicitante:</label>
-                                                <input type="text" id="fecha_nac" name="fecha_nac" class="form-control" v-model="solicitud.fecha_nac">
+                                                <input type="text" pattern="\d{4}-\d{1,2}" id="fecha_nac" name="fecha_nac" class="form-control" v-model="solicitud.fecha_nac">
                                               </div>                                              
                                             </div>
                                             
@@ -880,7 +916,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                            </div>
                                            <div class="form-group col-md-4">
                                               <label>L&iacute;nea autorizada:</label>
-                                              <input type="number" id="linea_autorizada" name="linea_autorizada" class="form-control" v-model="solicitud.linea_autorizada" >
+                                              <input type="number" id="linea_autorizada" name="linea_autorizada" class="form-control" v-model="solicitud.linea_autorizada" readonly>
                                            </div>
                                           </div>
 
