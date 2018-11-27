@@ -489,6 +489,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         this.read();
       },
+
       watch: {
 
         numeroSolicitudCap: function(newsolcap, oldsolcap) {
@@ -714,21 +715,21 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               <input type="date" class="form-control" value="" readonly="" v-model="solicitud.fecha_solicitud" >
                                             </div>
                                             <div class="form-group col-md-3">
-                                               <label> N&uacute;mero de solicitud auto: </label>
+                                               <label> N&uacute;mero de folio auto: </label>
                                                <input class="form-control" maxlength="8" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="solicitud.solicitud_ori"/>
                                              </div> 
                                             <div class="form-group col-md-3">
                                               <label>Plaza: </label>
                                               <select id="plaza" name="plaza" class="form-control" v-model="solicitud.plaza">
-                                                <option value="3" selected="">--- seleccione --- </option>
-                                                <option value="1">Foranea</option>
-                                                <option value="0">Monterrey</option>
+                                                <option value="null" selected="">--- seleccione --- </option>
+                                                <option value="FRN">Foranea</option>
+                                                <option value="MTY">Monterrey</option>
                                               </select>
                                             </div>
                                             <div class="form-group col-md-3">
                                               <label>Solicitud originada: </label>
                                               <select id="origen" name="origen" class="form-control" v-model="solicitud.origen">
-                                                <option value="3" selected="">--- seleccione--- </option>
+                                                <option value="null" selected="">--- seleccione--- </option>
                                                 <option value="1">Sucursal</option>
                                                 <option value="0">UEN - Arrendamiento</option>
                                               </select>
@@ -744,7 +745,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               <div class="form-group col-md-4">
                                               <label>Cuenta con tarjeta Banregio: </label>
                                               <select id="tar_banregio" name="tar_banregio" class="form-control" v-model="solicitud.tar_banregio">
-                                                <option value="3" selected="">--- seleccione--- </option>
+                                                <option value="null" selected="">--- seleccione--- </option>
                                                 <option value="1">Si</option>
                                                 <option value="0">No</option>
                                               </select>
@@ -752,7 +753,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             <div class="form-group col-md-4">
                                                 <label>Decisi&oacute;n final cr&eacute;dito automotriz: </label>
                                                 <select id="decision_final" name="decision_final" class="form-control" v-model="solicitud.decision_final" >
-                                                <option value="3" selected="">--- seleccione--- </option>
+                                                <option value="null" selected="">--- seleccione--- </option>
                                                 <option value="1">Autorizado</option>
                                                 <option value="0">Rechazado</option>
                                               </select>
@@ -829,26 +830,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             </div>
                                             
                                           </div> 
-                                          <!-- 
-                                          <hr style="border: 1px solid #fb6830;"/>
-                                          <div  id="sin_experiencia" class="form-row">
-                                            <div class="form-group col-md-12"><h5>Grupo sin Experiencia de cr&eacute;dito</h5></div>
-                                             <div class="form-group col-md-4">
-                                              <label>Capacidad de pago final:</label>
-                                              <input type="number" id="capacidad_pago" name="capacidad_pago" class="form-control" v-model="solicitud.capacidad_pago">               
-                                            </div>
-                                             <div class="form-group col-md-4">
-                                              <label>Ingreso neto disponible:</label>
-                                              <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
-                                            </div> 
-                                            <div class="form-group col-md-4">
-                                              <label>Fecha nacimiento del solicitante:</label>
-                                              <input type="date" id="fecha_nac" name="fecha_nac" class="form-control" >
-                                            </div>
-                                            
-                                          </div> -->
-
-                                         
+                                        
 
                                           <div v-if="linea_asignada != null">
                                             <hr style="border: 1px solid #fb6830;"/>
@@ -858,13 +840,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                  
 
                                                 <div class="form-group col-md-12">
-                                                <label>Presenta variable de alerta diferente a capacidad de pago insuficiente:</label>
-                                                <select id="var_alerta" class="form-control" v-model="solicitud.alerta">
-                                                    <option value="3">-- Seleccione---</option>
-                                                    <option value="1">Si</option>  
-                                                    <option value="0">No</option>  
-                                                </select>
-                                              </div>
+                                                  <label>Presenta variable de alerta diferente a capacidad de pago insuficiente:</label>
+                                                  <select id="var_alerta" class="form-control" v-model="solicitud.alerta">
+                                                      <option value="null">-- Seleccione---</option>
+                                                      <option value="1">Si</option>  
+                                                      <option value="0">No</option>  
+                                                  </select>
+                                                </div>
                                               
                                                 
                                              
@@ -874,7 +856,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                 <div class="form-group col-md-12">
                                                 <label>Presenta variable de rechazo diferente a capacidad de pago nula:</label>
                                                 <select id="var_rechazo" class="form-control" v-model="solicitud.rechazo">
-                                                    <option value="3">-- Seleccione---</option>
+                                                    <option value="null">-- Seleccione ---</option>
                                                     <option value="1">Si</option>  
                                                     <option value="0">No</option>  
                                                 </select>
