@@ -412,6 +412,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         },
 
+        fecha_nac_d () {
+          return this.solicitud.fecha_nac + '-01';
+        },
+
         decreto (){         
           if (this.linea_asignada == null || this.alerta_rechazo == null){return null;}
           
@@ -452,7 +456,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         edad() {
             var fecha = new Date();
-            var Fecha_Nac = new Date(this.solicitud.fecha_nac);
+
+            var Fecha_Nac = new Date(this.fecha_nac_d);
+            console.log('en edad');
+            console.log(this.fecha_nac_d);
                
             if(Fecha_Nac.getDate() > fecha.getDate()){
               return  (fecha.getFullYear() - Fecha_Nac.getFullYear()) * 12 + (fecha.getMonth()+1) - (Fecha_Nac.getMonth()+1) - 1;
@@ -503,7 +510,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         this.read();
       },
 
-      mounted: function () {
+      updated: function () {
         if (!this.linea_asignada) {
           $('#linea_autorizada').prop('readonly', true);
         } else {
@@ -860,7 +867,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                 <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
                                               </div> 
                                               <div class="form-group col-md-4">
-                                                <label>Fecha nacimiento del solicitante:</label>
+                                                <label>Fecha nacimiento del solicitante: {{edad}}</label>
                                                 <input type="text" pattern="\d{4}-\d{1,2}" placeholder="1900-01" id="fecha_nac" name="fecha_nac" class="form-control" v-model="solicitud.fecha_nac">
                                               </div>                                              
                                             </div>
