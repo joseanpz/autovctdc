@@ -61,6 +61,9 @@ function insert(data) {
           setStr(data.solicitud_ori),
           data.decreto,
           data.linea_asignada,
+          data.plaza,
+          data.origen,
+          data.linea_autorizada,
           setStr(data.num_cred_rev),
           setStr(data.tar_banregio), 
           data.ingreso_neto,
@@ -94,7 +97,7 @@ function insert(data) {
       var auto_inc = configs[0];
       var auto_inc_id = parseInt(auto_inc.value);
       sheetConfigs.getRange(2,2,1,1).setValue(auto_inc_id+1);
-      data.id = auto_inc_id;
+      data.id = auto_inc_id + data.solicitud_ori;
      
      Logger.log(data);
 
@@ -110,6 +113,9 @@ function insert(data) {
         setStr(data.solicitud_ori),
         data.decreto,
         data.linea_asignada,
+        data.plaza,
+        data.origen,
+        data.linea_autorizada,
         setStr(data.num_cred_rev),
         setStr(data.tar_banregio), 
         data.ingreso_neto,

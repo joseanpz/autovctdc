@@ -311,6 +311,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           fecha_nac: null,
           fecha_solicitud: null,
           solicitud_ori: null,
+          plaza: null,
+          origen: null,
+          linea_autorizada: null,
           num_cred_rev: null,
           tar_banregio: null, 
           ingreso_neto: null,
@@ -345,7 +348,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
           ret = (this.solicitud.solicitud_ori === null)? false : (this.solicitud.solicitud_ori.length != 8)? false: true ;
           
-          console.log(ret);
+          // console.log(ret);
 
           return ret;
           
@@ -661,7 +664,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 <body>
   <nav class="navbar navbar-expand static-top" style="background: #fb6830;">
 
-      <div class="col-sm-10" style="color:white; font-size: 20px">Evaluaci&oacute;n Venta Cruzada TDCxAUTO</div>
+      <div class="col-sm-10" style="color:white; font-size: 20px">Evaluaci&oacute;n Venta Cruzada TDCxAUTO Campaña010</div>
       <div class="col-sm-2"><img  src="https://portalbanregio.s3.amazonaws.com/assets/naranja/img/logo-sm.png">
       <span style="color:white;"><?= user_email ?></span>
     </div>
@@ -694,7 +697,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               Venta Cruzada Tarjeta de Cr&eacute;dito - F&aacute;brica Automotriz  </div>
             <div class="card-body" id="solicitud-app">
               <div class="table-responsive">
-                <button type="button" class="btn btn-sm btn-success" v-on:click='toggleResetForm()' style="color: white; background: #fb6830;border-radius: 25px;border: 1px solid; padding: 11px 20px;">Crear Nueva Solicitud</button>
+                <button type="button" class="btn btn-sm btn-success" v-on:click='toggleResetForm()' style="color: white; background: #fb6830;border-radius: 25px;border: 1px solid; padding: 11px 20px;">Crear Nuevo Folio</button>
                 <!--<a href="javascript:void(0);" style="float:right;" onclick="$('#importFrm').slideToggle();">Crear Nueva Solicitud</a>--> 
                 <br/>
                 <hr style="border: 2px solid gray;">
@@ -717,7 +720,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                             <div class="form-group col-md-3">
                                               <label>Plaza: </label>
                                               <select id="plaza" name="plaza" class="form-control" v-model="solicitud.plaza">
-                                                <option value="3" selected="">--- seleccione--- </option>
+                                                <option value="3" selected="">--- seleccione --- </option>
                                                 <option value="1">Foranea</option>
                                                 <option value="0">Monterrey</option>
                                               </select>
@@ -869,8 +872,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
                                               <div class="form-group col-md-6">
                                                 <div class="form-group col-md-12">
-                                                <label>Presenta variable de rechazo diferente a capacidad de pago nula:<br/><br/></label>
-                                                
+                                                <label>Presenta variable de rechazo diferente a capacidad de pago nula:</label>
                                                 <select id="var_rechazo" class="form-control" v-model="solicitud.rechazo">
                                                     <option value="3">-- Seleccione---</option>
                                                     <option value="1">Si</option>  
@@ -895,8 +897,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               <input type="number" id="linea_asignada" name="linea_asignada" class="form-control" v-model="linea_asignada" readonly>
                                            </div>
                                            <div class="form-group col-md-4">
-                                              <label>L&iacute;nea Autorizada:</label>
-                                              <input type="number" id="linea_autorizada" name="linea_autorizada" class="form-control" v-model="linea_autorizada" readonly>
+                                              <label>L&iacute;nea autorizada:</label>
+                                              <input type="number" id="linea_autorizada" name="linea_autorizada" class="form-control" v-model="solicitud.linea_autorizada" >
                                            </div>
                                           </div>
 
