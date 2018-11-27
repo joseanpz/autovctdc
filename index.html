@@ -354,6 +354,16 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           
         },
 
+        lineaAutorizada () {
+
+          
+          
+          // console.log(ret);
+
+          return this.solicitud.linea_autorizada;
+          
+        },
+
         avanza () {          
           
           
@@ -503,9 +513,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
       created: function () {
         
-        this.debounceInsert = _.debounce(this.insert, 500);
+        this.debounceInsert = _.debounce(this.insert, 1000);
 
-        this.debounceUpdate = _.debounce(this.update, 500);
+        this.debounceUpdate = _.debounce(this.update, 1000);
 
         this.read();
       },
@@ -556,11 +566,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             this.debounceUpdate();  
           //}
         },
-         linea_autorizada: function(newdecreto, olddecreto) {
+         lineaAutorizada: function(newlinaut, oldlinaut) {
 
          // if (newdecreto != null && !this.loading) {
-            console.log('watching decreto');
-            console.log(newdecreto);
+
             this.debounceUpdate();  
           //}
         },
@@ -867,7 +876,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                 <input type="number" id="ingreso_neto" name="ingreso_neto" class="form-control" v-model="solicitud.ingreso_neto">
                                               </div> 
                                               <div class="form-group col-md-4">
-                                                <label>Fecha nacimiento del solicitante: {{edad}}</label>
+                                                <label>Fecha nacimiento del solicitante:</label>
                                                 <input type="text" pattern="\d{4}-\d{1,2}" placeholder="1900-01" id="fecha_nac" name="fecha_nac" class="form-control" v-model="solicitud.fecha_nac">
                                               </div>                                              
                                             </div>
