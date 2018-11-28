@@ -18,6 +18,14 @@ function read(){
 
 function insert(data) {
 
+  if (!data.solicitud_ori) {
+    return {
+      message: 'Bad request',
+      data: null,
+      status: 400
+   };
+  }
+
   
   var user = new User(Session.getActiveUser());
    // all data your needed
@@ -75,7 +83,8 @@ function insert(data) {
           data.limite_tdc,
           data.email_generador
         ]])
-        var result = "Update successful";
+        var message = "Update successful";
+        var status = 204
         break;         
       }
    }
@@ -131,11 +140,13 @@ function insert(data) {
 
 
       var message = "Insertion successful";
+      var status = 201;
    }
 
    return {
       message: message,
-      data: data
+      data: data,
+      status: status
    };
 }
 
