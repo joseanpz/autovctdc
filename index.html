@@ -390,7 +390,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         },
 
         linea_asignada () {
-          if (this.exp_rev == null || this.solicitud.score_parametrico == null || this.solicitud.bc_score == null ) {
+          if (!this.exp_rev || !this.solicitud.score_parametrico || !this.solicitud.bc_score ) {
             console.log('linea asignada return  1');
             return null;
           } else {
@@ -544,11 +544,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           if (newsolcap && !this.loading) {
              console.log('watching numeroSolicitudCap');
              console.log(newsolcap);
-              this.debounceInsert();  
-            
-            
+              this.debounceInsert();           
           }
         },
+
         avanza: function(newavanza, oldavanza) {
           if (newavanza && !this.loading){
             console.log('watching avanza');
@@ -556,6 +555,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             this.debounceUpdate();
           }
         },
+
         linea_asignada: function(newlineaasignada, oldlineaasignada) {
           console.log('watching linea_asignada');
           console.log(newlineaasignada);
@@ -568,6 +568,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           this.debounceUpdate(); 
           
         },
+
         decreto: function(newdecreto, olddecreto) {
 
          // if (newdecreto != null && !this.loading) {
@@ -576,7 +577,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             this.debounceUpdate();  
           //}
         },
-         lineaAutorizada: function(newlinaut, oldlinaut) {
+        
+        lineaAutorizada: function(newlinaut, oldlinaut) {
 
          // if (newdecreto != null && !this.loading) {
             this.debounceUpdate();  
