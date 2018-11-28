@@ -366,7 +366,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             } else {
               this.solicitud.linea_autorizada = null;
             }
-          }         
+          }        
           
           // console.log(ret);
 
@@ -390,7 +390,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         },
 
         linea_asignada () {
-          if (!this.exp_rev || !this.solicitud.score_parametrico || !this.solicitud.bc_score ) {
+          console.log('en linea asignada');
+          console.log(this.exp_rev);
+          console.log(this.solicitud.score_parametrico);
+          console.log(this.solicitud.bc_score);
+          if (this.exp_rev == null || !this.solicitud.score_parametrico || !this.solicitud.bc_score ) {
             console.log('linea asignada return  1');
             return null;
           } else {
@@ -417,7 +421,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               }
             }
             else if (this.exp_rev == 2){
-              if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null || this.solicitud.fecha_nac == null){
+              console.log('exp rev 2');
+              console.log(this.solicitud.fecha_nac);
+              if (this.solicitud.capacidad_pago == null || this.solicitud.ingreso_neto == null || !this.solicitud.fecha_nac){
                 console.log('linea asignada return  6');
                 return null;
               }else {
@@ -577,7 +583,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
             this.debounceUpdate();  
           //}
         },
-        
+
         lineaAutorizada: function(newlinaut, oldlinaut) {
 
          // if (newdecreto != null && !this.loading) {
@@ -964,9 +970,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                     <tr>
                       <th>Fecha de registro</th>
                       <th>Usuario que editó</th>
-                      <th>Solicitud origen</th>
+                      <th>Folio origen</th>
                       <th>Decreto</th>
-                      <th>Línea asignada</th>
+                      <th>Línea sugerida</th>
                       <th>Línea autorizada</th>
                       <th>Acciones</th>
                      </tr>
