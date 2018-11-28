@@ -354,13 +354,23 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           
         },
 
-        lineaAutorizada () {
+        lineaAutorizada: {
 
-          
+          get: function () {
+            return this.solicitud.linea_autorizada;
+          },
+
+          set: function (newvalue) {
+            if (!!this.solicitud.linea_asignada && newvalue <= this.solicitud.linea_asignada && newvalue >= 0 ) {
+              this.solicitud.linea_autorizada = newvalue;
+            } else {
+              this.solicitud.linea_autorizada = null;
+            }
+          }         
           
           // console.log(ret);
 
-          return this.solicitud.linea_autorizada;
+         
           
         },
 
@@ -569,7 +579,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
          lineaAutorizada: function(newlinaut, oldlinaut) {
 
          // if (newdecreto != null && !this.loading) {
-
             this.debounceUpdate();  
           //}
         },
@@ -932,7 +941,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                            </div>
                                            <div class="form-group col-md-4">
                                               <label>L&iacute;nea autorizada:</label>
-                                              <input type="number" id="linea_autorizada" name="linea_autorizada" class="form-control" v-model="solicitud.linea_autorizada" readonly>
+                                              <input type="number" id="linea_autorizada" name="linea_autorizada" class="form-control" v-model="lineaAutorizada" readonly>
                                            </div>
                                           </div>
 
@@ -952,11 +961,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                   <thead>
                     <tr>
                       <th>Fecha de registro</th>
-                      <th>Último usuario que editó</th>
+                      <th>Usuario que editó</th>
                       <th>Solicitud origen</th>
                       <th>Decreto</th>
                       <th>Línea asignada</th>
-                      <th></th>
+                      <th>Línea autorizada</th>
+                      <th>Acciones</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -967,6 +977,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                       <td>{{solicitud.solicitud_ori}}</td>
                       <td>{{solicitud.decreto}}</td>
                       <td>{{solicitud.linea_asignada}}</td>
+                      <td>{{solicitud.linea_autorizada}}</td>
 
                       <td>
                         <button type="button" class="btn btn-sm btn-success" v-on:click='edit(solicitud.id)' style="color: white; background: #fb6830;border-radius: 25px;border: 1px solid; padding: 11px 20px;">Editar</button>
