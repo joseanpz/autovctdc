@@ -27,6 +27,7 @@ function _readData(sheetObject, properties) {
    
    return data;
 }
+
 function _getDataRows(sheetObject) {
    var sh = sheetObject;
   //return [2, 1, sh.getLastRow() - 1, sh.getLastColumn()];
@@ -42,20 +43,6 @@ function _getHeaderRow(sheetObject) {
    var sh = sheetObject;
 
    return sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
-}
-function response(callback) {
-   return {
-      json: function(data) {
-        return ContentService
-            .createTextOutput(callback+'('+JSON.stringify(data)+')')
-            .setMimeType(ContentService.MimeType.JAVASCRIPT); 
-        
-        //return ContentService
-        //    .createTextOutput(JSON.stringify(data))
-        //    .setMimeType(ContentService.MimeType.JAVASCRIPT);
-            //.setMimeType(ContentService.MimeType.JSON);
-      }
-   }
 }
 
 function setStr(data) {

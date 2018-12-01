@@ -12,6 +12,13 @@ function read(){
 }
 
 
+function read_sucursales(){
+  var data = {};
+  var sheet = db.getSheetByName("sucursales");  
+  data.records = _readData(sheet);  
+  return data;
+}
+
 /*
 * Insetrt Solicitud
 */
@@ -69,8 +76,9 @@ function insert(data) {
           setStr(data.solicitud_ori),
           data.decreto,
           data.linea_asignada,
-          data.plaza,
-          data.origen,
+          setStr(data.sucursal),
+          //data.plaza,
+          //data.origen,
           data.linea_autorizada,
           setStr(data.num_cred_rev),
           setStr(data.tar_banregio), 
@@ -122,8 +130,9 @@ function insert(data) {
         setStr(data.solicitud_ori),
         data.decreto,
         data.linea_asignada,
-        data.plaza,
-        data.origen,
+        setStr(data.sucursal),
+        //data.plaza,
+        //data.origen,
         data.linea_autorizada,
         setStr(data.num_cred_rev),
         setStr(data.tar_banregio), 
