@@ -473,7 +473,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           if (this.linea_asignada == null || this.alerta_rechazo == null){return null;}
 
           if (this.sucursal_seleccionada.restringido == "2") {
-            if (this.solicitud.bc_score >= 0 && this.solicitud.bc_score <= 684) {
+            if (this.solicitud.bc_score >= 0 && this.solicitud.bc_score < 684) {
               return "Rechazado por política"
             }
           }
