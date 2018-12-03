@@ -36,7 +36,7 @@ function insert(data) {
    if (data.fecha_solicitud === null){
 
     var now_date = new Date(Date.now());
-    data.fecha_solicitud = now_date.getFullYear() +"-"+(now_date.getMonth()+1)+"-"+now_date.getDate();
+    data.fecha_solicitud = now_date.getFullYear() + "-" + (now_date.getMonth()+1) + "-" + leftPad(now_date.getDate(),2);
   }
 
   //if (data.email_generador === null) {
