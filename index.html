@@ -378,7 +378,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         sucursal_seleccionada () {
 
-          var ret = this.sucursales.find(row => row.id_oficina == this.solicitud.sucursal);
+          var ret = this.sucursales.find(row => row.oficina == this.solicitud.sucursal);
 
           return ret
         },
