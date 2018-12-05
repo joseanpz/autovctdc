@@ -304,6 +304,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
     const form_app = new Vue({
       el: '#solicitud-app',
       data: {
+        sucursales: [],
         solicitudes: [],
         solicitud: {
           id: null,
@@ -311,8 +312,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           fecha_nac: null,
           fecha_solicitud: null,
           solicitud_ori: null,
-          plaza: null,
-          origen: null,
+          sucursal: null,
+          //plaza: null,
+          //origen: null,
           linea_autorizada: null,
           num_cred_rev: null,
           tar_banregio: null, 
@@ -374,13 +376,38 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           
         },
 
+        sucursal_seleccionada () {
+
+          var ret = this.sucursales.find(row => row.oficina == this.solicitud.sucursal);
+
+          return ret
+        },
+
         avanza () {          
           
           
-          ret = (
-            this.numeroSolicitudCap && this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" 
-            && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0
-          );
+          var ret = this.numeroSolicitudCap;
+          ret = ret && this.solicitud.tar_banregio == "0";
+          ret = ret && this.solicitud.decision_final == "1";
+          ret = ret && !!this.solicitud.num_cred_rev;
+          ret = ret && this.solicitud.num_cred_rev >= 0 && this.solicitud.num_cred_rev <= 6;
+          console.log('avanza');
+          console.log(this.sucursal_seleccionada);
+          if (!!this.sucursal_seleccionada) {
+            ret = ret && this.sucursal_seleccionada.restringido != "1";
+          }
+          
+          console.log(ret);
+          // ret = ret && this.solicitud.num_cred_rev >= 0;
+
+          // ret = (
+          //   this.numeroSolicitudCap && this.solicitud.tar_banregio == "0" && this.solicitud.decision_final == "1" 
+          //   && this.solicitud.num_cred_rev != null && this.solicitud.num_cred_rev <= 6 && this.solicitud.num_cred_rev >= 0
+          // );
+
+
+
+
            return ret;
         },
 
@@ -444,6 +471,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         decreto (){         
           if (this.linea_asignada == null || this.alerta_rechazo == null){return null;}
+
+          if (this.sucursal_seleccionada.restringido == "2") {
+            if (this.solicitud.bc_score >= 0 && this.solicitud.bc_score < 684) {
+              return "Rechazado por política"
+            }
+          }
           
           if(this.solicitud.score_parametrico <= "644" || (this.alerta_rechazo && this.solicitud.score_parametrico <= "739")){
             return  "Revisión Facultado TDC";
@@ -533,7 +566,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
         this.debounceUpdate = _.debounce(this.update, 1000);
 
+        this.readSucursales();
+
         this.read();
+
+        console.log(this.sucursales);
       },
 
       updated: function () {
@@ -555,11 +592,11 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         },
 
         avanza: function(newavanza, oldavanza) {
-          if (newavanza && !this.loading){
+          //if (newavanza && !this.loading){
             console.log('watching avanza');
             console.log(newavanza);
             this.debounceUpdate();
-          }
+          //}
         },
 
         linea_asignada: function(newlineaasignada, oldlineaasignada) {
@@ -600,8 +637,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           this.solicitud.fecha_nac= null;
           this.solicitud.fecha_solicitud = null;
           this.solicitud.solicitud_ori = null;
-          this.solicitud.plaza = null;
-          this.solicitud.origen = null;
+          this.solicitud.sucursal = null;
+          //this.solicitud.plaza = null;
+          //this.solicitud.origen = null;
           this.solicitud.linea_autorizada = null;
           this.solicitud.num_cred_rev = null;
           this.solicitud.tar_banregio = null;
@@ -639,6 +677,19 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
               console.log(err);
             })
             .read()
+        }, 
+
+        readSucursales: function () {
+          var self = this;
+          google.script.run
+            .withSuccessHandler(function(response){
+              console.log(response);
+              self.sucursales = response.records;
+            })
+            .withFailureHandler(function(err){
+              console.log(err);
+            })
+            .read_sucursales()
         }, 
 
         insert: function() {
@@ -787,14 +838,19 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                <label> N&uacute;mero de folio auto: </label>
                                                <input class="form-control" maxlength="8" type="text"  id="solicitud_ori" name="solicitud_ori" v-model="solicitud.solicitud_ori"/>
                                              </div> 
-                                            <div class="form-group col-md-3">
-                                              <label>Plaza: </label>
-                                              <select id="plaza" name="plaza" class="form-control" v-model="solicitud.plaza">
+                                            <div class="form-group col-md-6">
+                                              <label>Sucursal: </label>
+                                              <select id="sucursal" name="sucursal" class="form-control" v-model="solicitud.sucursal">
+                                                <option value="null" selected="">--- seleccione --- </option>
+                                                <option v-for="sucursal in sucursales" :value="sucursal.oficina">{{ sucursal.id_oficina }}-{{ sucursal.oficina }} </option>
+                                                <!--
                                                 <option value="null" selected="">--- seleccione --- </option>
                                                 <option value="FRN">Foranea</option>
                                                 <option value="MTY">Monterrey</option>
+                                                -->
                                               </select>
                                             </div>
+                                            <!--
                                             <div class="form-group col-md-3">
                                               <label>Origen: </label>
                                               <select id="origen" name="origen" class="form-control" v-model="solicitud.origen">
@@ -803,6 +859,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                                 <option value="UEN-ARR">UEN - Arrendamiento</option>
                                               </select>
                                             </div>
+                                            -->
                                               
                                          </div>
                                         
