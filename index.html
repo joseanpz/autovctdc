@@ -842,7 +842,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
                                               <label>Sucursal: </label>
                                               <select id="sucursal" name="sucursal" class="form-control" v-model="solicitud.sucursal">
                                                 <option value="null" selected="">--- seleccione --- </option>
-                                                <option v-for="sucursal in sucursales" :value="sucursal.id_oficina">{{ sucursal.id_oficina }}-{{ sucursal.oficina }} </option>
+                                                <option v-for="sucursal in sucursales" :value="sucursal.oficina">{{ sucursal.id_oficina }}-{{ sucursal.oficina }} </option>
                                                 <!--
                                                 <option value="null" selected="">--- seleccione --- </option>
                                                 <option value="FRN">Foranea</option>
