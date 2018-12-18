@@ -603,6 +603,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           console.log('watching linea_asignada');
           console.log(newlineaasignada);
           if (!newlineaasignada ) {
+            this.lineaAutorizada = null;
             $('#linea_autorizada').prop('readonly', true);             
           }else {
             $('#linea_autorizada').prop('readonly', false);
